@@ -8,8 +8,8 @@ import Item from '../../components/Item/Item'
 
 const Lista = (props) => {
     const [items, setItems] = useState([])
-    const [listName, setListName] = useState("")
-    const [listId, setListId] = useState("")
+    const [name, setName] = useState("")
+    const [id, setId] = useState("")
 
     const [focused, setFocus] = useState(false)
     const [update, setUpdate] = useState(false)
@@ -19,8 +19,8 @@ const Lista = (props) => {
         axios.get(`lista/${props.match.params.id}`)
             .then( res => {
                 console.log(res.data)
-                setListName(res.data.name)
-                setListId(res.data._id)
+                setName(res.data.name)
+                setId(res.data._id)
                 setItems(res.data.orders)
             })
             .catch( err => console.log('[ERR]', err) )
@@ -39,47 +39,25 @@ const Lista = (props) => {
             linput.focus()
         }
     }
-
-    const parseInput = input => {
-        console.log('INPUT', input)
-        const divided = input.split(' ')
-        console.log('DIVIDED', divided)
-        if(!input){
-            return null
-        }else if(divided[divided.length - 1][0] === 'x' && parseInt(divided[divided.length - 1].slice(1))){
-            console.log('aqui he llegado', divided.slice(divided.length - 1).join(''), parseInt(divided[divided.length - 1].slice(1)))
-            const result =[divided.slice(0, divided.length - 1).join(' '), parseInt(divided[divided.length - 1].slice(1))]
-            console.log('[RESULT]', result)
-            return result
-        } else {
-            return [input, 1]
-        }
-    }
-
     const handleSubmit = (e) => {
         e.preventDefault()
         axios.defaults.baseURL = ''
-        const value = document.querySelector('#searchInput').value
-
-        const parsed = parseInput(value) // parsed[0] = name, parsed[1] = q
-
-        if (parsed !== null){
-            setItems([...items,{item:{name: parsed[0]}, q: parsed[1]}])
-            axios.post(`http://localhost:8080/lista/posttolista/${listId}`, {name: parsed[0] ,q: parsed[1]})
-                .then(res => console.log(res))
-                .catch(err => console.log(err))
-
-        }
+        const name = document.querySelector('#searchInput').value
+        console.log('[NAME]', name)
+        setItems([...items, {name: name, q: 1, status: null, id: (new Date()).toString()}])
+        axios.post('http://localhost:8080/lista/newingredient', {name: name ,q: 1})
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
     }
 
     const listItems = items.map(item => (
-        <Item name={item.item ? item.item.name : null} q={item.q} status={item.status}/>
+        <Item name={item.itemName} q={item.q} status={item.status}/>
     ))
 
     //{/* onFocus={handleDBL} onBlur={handleDBL} */}
     return(
         <div className={classes.bigContainer}>
-            <h1 className={classes.h1}>{listName}</h1>
+            <h1 className={classes.h1}>lista familia</h1>
             <div className={classes.itemsContainer}>
                 {listItems}
             </div>

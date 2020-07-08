@@ -8,7 +8,7 @@ import ListInstance from '../../components/ListInstance/ListInstance'
 import classes from './Listas.module.sass'
 
 const Listas = (props) => {
-    const [listas, setListas] = useState(null)
+    const [listas, setListas] = useState([])
 
     const [update, setUpdate] = useState(false)
 
@@ -26,7 +26,7 @@ const Listas = (props) => {
     ))
 
     return (
-        <div>
+        <div className={classes.itemsContainer}>
             {instances}
         </div>
 

@@ -15,7 +15,7 @@ app.use('/lista', listaRoutes)
 
 mongoose.connect('mongodb+srv://domingoAdmin:domingoAdmin36@cluster0.0aa3g.mongodb.net/lista?retryWrites=true&w=majority',{useUnifiedTopology: true, useNewUrlParser: true})
     .then(res => {
-        console.log('[DB_CONNECTED]', res)
+        //console.log('[DB_CONNECTED]', res)
         app.listen(8080)
     })
     .catch(err => console.log('[DB_ERROR]', err))

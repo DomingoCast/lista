@@ -8,7 +8,7 @@ const listaSchema = new Schema({
     },
     orders: [
         {
-            itemId:{type: Schema.Types.ObjectId, required: true},
+            item: {type: Schema.Types.ObjectId, required: true, ref: 'Ingredient'},
             q: {type: Number, required: true}
         }
     ]

@@ -6,7 +6,7 @@ import Button from '../Button/Button'
 
 const Start = (props) =>{
     const buttonClick = () => {
-        props.history.push('/lista')
+        props.history.push('/listas')
     }
 
     return(

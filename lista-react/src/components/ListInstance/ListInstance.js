@@ -7,7 +7,9 @@ import classes from './ListInstance.module.sass'
 const listInstance = (props) => {
     return(
         <div className={classes.container}>
-            <Link>{props.name}</Link>
+            <Link className={classes.link} to={{
+                pathname: `/lista/${props.listaId}`,
+            }}>{props.name}</Link>
         </div>
     )
 }
