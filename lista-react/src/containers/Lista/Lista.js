@@ -23,9 +23,18 @@ const Lista = (props) => {
                 setListId(res.data._id)
                 setItems(res.data.orders)
             })
-            .catch( err => console.log('[ERR]', err) )
-            }, [update]
-    )
+            .catch( err => {
+                console.log('[FIRST_ERR]', err)
+            })
+            axios.get(`http://192.168.1.12:8080/lista/lista/${props.match.params.id}`)
+            .then( res => {
+                console.log(res.data)
+                setListName(res.data.name)
+                setListId(res.data._id)
+                setItems(res.data.orders)
+            })
+            .catch(err => console.log('[SECOND_ERR]', err))
+        }, [update])
 
 
     const handleDBL = () => {
@@ -72,15 +81,75 @@ const Lista = (props) => {
         }
     }
 
-    const listItems = items.map(item => (
-        <Item name={item.item ? item.item.name : null} q={item.q} status={item.status}/>
+    const updateOrder = (index, newOrder) => {
+        axios.put(`putorder/${listId}/${index}`, {order: newOrder})
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
+
+    const deleteOrder = (orderId) => {
+        //axios.delete(`putorder/${listId}`, {orderId: orderId})
+            //.then(res => console.log(res))
+            //.catch(err => console.log(err))
+    }
+
+    const increase = (id, index) => {
+        const newItems = [...items]
+        const newOrder = {...newItems[index]}
+        newOrder.q += 1
+        newItems[index] = newOrder
+        setItems(newItems)
+        if(newOrder.q > 0){
+            newOrder.status = null
+        }
+        updateOrder(index, newOrder)
+    }
+
+    const decrease = (id, index) => {
+        const newItems = [...items]
+        const newOrder = {...newItems[index]}
+        newOrder.q -= 1
+        if (newOrder.q === 0){
+            newOrder.status = 'bought'
+            console.log(newOrder)
+        } else if(newOrder.q === -1){
+            newOrder.status = 'borrado'
+            //console.log(newOrder)
+            //delete newItems[index]
+            //document.getElementById(listId).removeChild(document.getElementById(id))
+            //console.log(document.getElementById(listId))
+            //console.log(document.getElementById(id))
+            //setItems(newItems)
+            //return 'deleted'
+            console.log('spaghetti')
+        }
+
+        newItems[index] = newOrder
+        setItems(newItems)
+        console.log('[decreasing]')
+
+        updateOrder(index, newOrder)
+    }
+
+
+
+    const listItems = items.map((item, index) => (
+        <Item name={item.item ? item.item.name : null}
+                key={item._id}
+                lid={item._id}
+                q={item.q}
+                status={item.status}
+                increase={ () => increase(item._id, index) }
+                decrease={ () => decrease(item._id, index) }
+               //setQ={ () => setQ(index) }
+        />
     ))
 
     //{/* onFocus={handleDBL} onBlur={handleDBL} */}
     return(
         <div className={classes.bigContainer}>
             <h1 className={classes.h1}>{listName}</h1>
-            <div className={classes.itemsContainer}>
+            <div id={listId} className={classes.itemsContainer}>
                 {listItems}
             </div>
             <div onClick={handleDBL} className={classes.hitBox}>

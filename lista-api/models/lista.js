@@ -9,7 +9,8 @@ const listaSchema = new Schema({
     orders: [
         {
             item: {type: Schema.Types.ObjectId, required: true, ref: 'Ingredient'},
-            q: {type: Number, required: true}
+            q: {type: Number, required: true},
+            status: {type: String, required: false}
         }
     ]
 })

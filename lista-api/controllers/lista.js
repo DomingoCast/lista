@@ -102,3 +102,14 @@ exports.postLista = (req, res, next) => {
         data: lista
     })
 }
+
+exports.putOrder = (req, res, next) => {
+    Lista.findById(req.params.listId)
+        .then(response => {
+            //const newItems = [...items]
+            console.log('[RESPONSE lista]', response)
+            response.orders[req.params.index] = req.body.order
+            response.save()
+            res.status(200).json(response)
+        })
+}

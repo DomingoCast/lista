@@ -4,8 +4,11 @@
     text-align: center
     display: flex
     justify-content: space-between
+    transition: transform var(--trans-time) //aqui porque cuando quito las class swiping se va
+    font-size: 7vw
+
+.swiping
     transform: translateX(var(--transform))
-    transition: all var(--trans-time)
 
 .minus
     display: block
@@ -15,3 +18,10 @@
     display: block
     padding-right: .1rem
     color: var(--green-light)
+
+.bought
+    color: var(--grey-light-1)
+    .q
+        display: none
+.borrado
+    display: none
