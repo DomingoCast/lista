@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 
-import axios from '../../axios-lista'
+import axios from '../../axios-instances/axios-lista'
 
 //import ListInstance from '../../components/ListInstance/ListInstance'
 import ListInstance from '../../components/ListInstance/ListInstance'

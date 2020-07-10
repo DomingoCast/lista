@@ -1,0 +1,55 @@
+import React, { useState } from 'react'
+
+import { Link } from 'react-router-dom'
+import axios from '../../axios-instances/axios-auth'
+import { connect, dispatch } from 'react-redux'
+
+import Button from '../../components/Button/Button'
+import Input from '../../components/Input/Input'
+
+import classes from './Auth.module.sass'
+
+const Login = (props) => {
+
+    const handleSubmit = () => {
+        const username = document.getElementById('username').value
+        const password = document.getElementById('password').value
+        axios.post('login', {
+            username: username,
+            password: password
+        })
+            .then(res => {
+                console.log(res.data)
+                props.setToken(res.data.token)
+                props.history.push('/listas')
+            })
+            .catch(err => console.log(err))
+    }
+    return(
+        <div className={classes.bigContainer}>
+            <form className={classes.form}>
+                <h1 className={classes.h1}>log in</h1>
+                <div className={classes.inputContainer}>
+                    <Input type="username"/>
+                    <Input type="password"/>
+                </div>
+                <div className={classes.block3}>
+                    <Button className={classes.button} type="main" text="log in" click={handleSubmit}/>
+                    <Link className={classes.link} to='/singup'>sing up</Link>
+                </div>
+            </form>
+        </div>
+    )
+}
+
+//const mapState = (state) => ({
+    //token: state.auth.idToken
+//})
+
+const mapActions = (dispatch) => {
+    return{
+        setToken: (token) => dispatch({type: 'SET_TOKEN',token: token})
+    }
+}
+
+export default connect(null, mapActions)(Login)

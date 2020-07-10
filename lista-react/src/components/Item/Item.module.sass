@@ -21,7 +21,59 @@
 
 .bought
     color: var(--grey-light-1)
+    //align-self: flex-end
+    order: 1
     .q
         display: none
 .borrado
     display: none
+
+    .plusBack
+        transform: scale(.5)
+.maxed0
+    color: inherit
+.maxed1
+    //color: yellow
+    .plus
+        color: transparent
+        background: linear-gradient(to bottom right, var(--green-light), var(--green-yellow))
+        -webkit-background-clip: text
+    .minus
+        color: transparent
+        background: linear-gradient(to bottom left, var(--red-light), var(--fuchsia))
+        -webkit-background-clip: text
+.maxed2
+    color: inherit
+    .plus
+        color: var(--white)
+        position: relative
+        transition: all .2s .1s
+    .plusBack
+        position: absolute
+        z-index: -1
+        top: .2em
+        left: -.2em
+        height: 1em
+        width: 1em
+        background: linear-gradient(to bottom right, var(--green-light), var(--green-light-2))
+        //background: var(--green-light)
+        border-radius: 100%
+        transition: background .2s
+        //transition: transform .7s
+    .minus
+        color: var(--white)
+        position: relative
+        transition: all .2s .1s
+    .minusBack
+        position: absolute
+        z-index: -1
+        top: .25em
+        left: .05em
+        height: 1em
+        width: 1em
+        //background: var(--red-light)
+        background: linear-gradient(to bottom left, var(--red-light), var(--fuchsia))
+        border-radius: 100%
+        transition: background .2s
+        //transition: transform .7s
+

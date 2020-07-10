@@ -1,6 +1,7 @@
 const Ingredient = require('../models/ingredient')
 const Lista = require('../models/lista')
 
+
 exports.getIngredients = (req, res, next) => {
     Ingredient.find().then(response => {
         console.log('[RESPONSE]', response)

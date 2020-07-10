@@ -7,12 +7,26 @@ import Start from './components/Start/Start'
 import Lista from './containers/Lista/Lista'
 import Prueba from './containers/Prueba/Lista'
 import Listas from './containers/Listas/Listas'
+import Login from './containers/Auth/Login'
+import Singup from './containers/Auth/Singup'
 
-function App() {
+import { connect, dispatch } from 'react-redux'
+
+import axios from 'axios'
+import axiosAuth from './axios-instances/axios-auth'
+import axiosLista from './axios-instances/axios-lista'
+
+function App(props) {
+    axios.defaults.headers.common['Authorization'] = props.token
+    axiosAuth.defaults.headers.common['Authorization'] = props.token
+    axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + props.token
+    console.log('[TOKEN APP]', props.token)
   return (
         <>
             <Switch>
                 <Route path="/prueba" component={Prueba}/>
+                <Route path="/login" component={Login}/>
+                <Route path="/singup" component={Singup}/>
                 <Route path="/start" component={Start}/>
                 <Route path="/lista/:id" component={Lista}/>
                 <Route path="/listas" component={Listas}/>
@@ -22,5 +36,8 @@ function App() {
         </>
   );
 }
+const mapState = (state ) => ({
+    token : state.token
+})
 
-export default App
+export default connect(mapState)(App)

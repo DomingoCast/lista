@@ -7,7 +7,8 @@ const Item = (props) => {
     const [transform, setTransform] = useState(0)
     const [cap, setCap] = useState(50)
     const [swipingClass, setSwipingClass] = useState(null)
-    const [tiempo, setTiempo] = useState(1000)
+    const [maxed, setMaxed] = useState(0) // 0 para no, 1 para maxed, 2 para maxed y ha aguantado
+    const [tiempo, setTiempo] = useState(500)
     const [waiting, setWaiting] = useState(false)
     const [touch, setTouch] = useState(false)
     const [update, setUpdate] = useState(false)
@@ -32,10 +33,14 @@ const Item = (props) => {
 
     const decreaseQ = () =>{
         console.log('[DECREASE]')
+        if(props.q === 1){
+            document.documentElement.style
+                .setProperty('--trans-time', '.2s')
+        }
         props.decrease()
     }
 
-    const handleTM = (e, tiempoF = tiempo) => {
+    const handleTM = (e, tiempoF = tiempo, maxi = 1) => {
         setTouch(true)
         setSwipingClass(classes.swiping)
 
@@ -52,6 +57,7 @@ const Item = (props) => {
                 document.documentElement.style
                     .setProperty('--trans-time', `0s`);
             } else {
+                setMaxed(maxi)
                 //console.log('[OUT]', timer)
                 //console.log(timer)
                 //console.log('[waiting out]', waiting)
@@ -65,8 +71,10 @@ const Item = (props) => {
 
                     lmao = setTimeout( () => {
                         setWaiting(false)
+                        //setMaxed(2)
+                        console.log('[MAX]', maxed)
                         //console.log('[IN]', waiting, tiempo)
-                        handleTM(e, elTiempo)
+                        handleTM(e, elTiempo, 2)
 
                     },tiempoF)
                     setLwait(lmao)
@@ -82,6 +90,7 @@ const Item = (props) => {
     const handleTE = () => {
         //console.log('[TIEMPO]', tiempo)
         //console.log('[TE]')
+        setMaxed(0)
         setTouch(false)
         clearTimeout(lwait)
         //console.log('ya')
@@ -98,10 +107,11 @@ const Item = (props) => {
         //props.setQ(q)
         }
     return(
-        <div id={props.lid} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE} className={`${swipingClass} ${classes.itemBox} ${classes[props.status]}`}>
-            <span className={classes.minus}>-</span>
+        <div id={props.lid} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE}
+            className={`${swipingClass} ${classes.itemBox} ${classes[props.status]} ${classes['maxed'+maxed]}`}>
+            <span className={classes.minus}>-<div className={classes.minusBack}></div></span>
             <span >{props.name} <span className={classes.q}>x{props.q}</span></span>
-            <span className={classes.plus}>+</span>
+            <span className={classes.plus}>+<div className={classes.plusBack}></div></span>
         </div>
     )
 }
