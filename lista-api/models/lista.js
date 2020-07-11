@@ -12,7 +12,15 @@ const listaSchema = new Schema({
             q: {type: Number, required: true},
             status: {type: String, required: false}
         }
+    ],
+    users: [
+        {
+            type: Schema.Types.ObjectId,
+            ref: 'User',
+            required: false
+        }
     ]
+
 })
 
 module.exports = mongoose.model('Lista', listaSchema)

@@ -28,7 +28,7 @@ const Listas = (props) => {
     }, [update])
 
     const instances = listas.map( lista => (
-        <ListInstance name={lista.name} listaId={lista._id}/>
+        <ListInstance name={lista.name} key={lista._id} listaId={lista._id}/>
     ))
 
     return (

@@ -18,7 +18,7 @@ const Lista = (props) => {
         console.log(props)
         axios.get(`lista/${props.match.params.id}`)
             .then( res => {
-                console.log(res.data)
+                console.log('[RESPONSE]', res.data)
                 setListName(res.data.name)
                 setListId(res.data._id)
                 setItems(res.data.orders)
@@ -81,17 +81,18 @@ const Lista = (props) => {
         }
     }
 
-    const updateOrder = (index, newOrder) => {
-        axios.put(`putorder/${listId}/${index}`, {order: newOrder})
+    const updateOrder = (newOrder) => {
+        axios.put(`putorder/${listId}`, {order: newOrder})
+            .then(res => console.log(res))
+            .catch(err => console.log(err))
+    }
+    const deleteOrder = (orderId) => {
+        console.log('[DELETING]', orderId)
+        axios.delete(`deleteorder/${listId}/${orderId}`)
             .then(res => console.log(res))
             .catch(err => console.log(err))
     }
 
-    const deleteOrder = (orderId) => {
-        //axios.delete(`putorder/${listId}`, {orderId: orderId})
-            //.then(res => console.log(res))
-            //.catch(err => console.log(err))
-    }
 
     const increase = (id, index) => {
         const newItems = [...items]
@@ -109,26 +110,23 @@ const Lista = (props) => {
         const newItems = [...items]
         const newOrder = {...newItems[index]}
         newOrder.q -= 1
+        console.log('[NEW ORDER]', newOrder)
         if (newOrder.q === 0){
             newOrder.status = 'bought'
-            console.log(newOrder)
         } else if(newOrder.q === -1){
             newOrder.status = 'borrado'
-            //console.log(newOrder)
-            //delete newItems[index]
-            //document.getElementById(listId).removeChild(document.getElementById(id))
-            //console.log(document.getElementById(listId))
-            //console.log(document.getElementById(id))
-            //setItems(newItems)
-            //return 'deleted'
-            console.log('spaghetti')
+            console.log('spaghetti', id)
+            deleteOrder(id)
+            newItems[index] = newOrder
+            setItems(newItems)
+            return
         }
 
         newItems[index] = newOrder
         setItems(newItems)
         console.log('[decreasing]')
 
-        updateOrder(index, newOrder)
+        updateOrder(newOrder)
     }
 
 

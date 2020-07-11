@@ -1,5 +1,8 @@
+const ObjectId = require('mongodb').ObjectId
+
 const Ingredient = require('../models/ingredient')
 const Lista = require('../models/lista')
+
 
 
 exports.getIngredients = (req, res, next) => {
@@ -39,9 +42,18 @@ exports.getLista = (req, res, next) => {
                 model: 'Ingredient'
             }
         })
-        .then(response => {
-            console.log('[RESPONSE]', response)
-            res.status(200).json(response)
+        .then( lista => {
+            console.log('[IDS]', ObjectId(req.userId), lista.users)
+            if(lista.users.includes(ObjectId(req.userId))){
+                console.log('[RESPONSE this]', lista)
+                res.status(200).json(lista)
+
+            } else {
+                const err = new Error('no estas en la lista')
+                err.statusCode = 401
+                res.status(401).json('no estas en la lista')
+                throw err
+            }
         })
         .catch(err => console.log('[FETCH_ERR]', err))
 }
@@ -82,7 +94,7 @@ exports.postToLista = (req, res, next) => {
 }
 
 exports.getListas = (req, res, next) => {
-    Lista.find().then(response => {
+    Lista.find({"users": { $in: req.userId }}).then(response => {
         console.log('[RESPONSE]', response)
         res.status(200).json(response)
     })
@@ -106,11 +118,27 @@ exports.postLista = (req, res, next) => {
 
 exports.putOrder = (req, res, next) => {
     Lista.findById(req.params.listId)
-        .then(response => {
-            //const newItems = [...items]
-            console.log('[RESPONSE lista]', response)
-            response.orders[req.params.index] = req.body.order
-            response.save()
-            res.status(200).json(response)
+        .then(lista => {
+            const upIndex = lista.orders.findIndex(order => order._id.toString() === req.body.order._id)
+            console.log('[ID]', req.body.order._id, req.body.order)
+            console.log('[INDEX]', upIndex)
+            lista.orders[upIndex] = req.body.order
+            lista.save()
+            res.status(200).json(lista)
+        })
+}
+
+exports.deleteOrder = (req, res, next) => {
+    console.log('[DELETIN]')
+    Lista.findById(req.params.listId)
+        .then(lista => {
+            const upIndex = lista.orders.findIndex(order => order._id.toString() === req.params.orderId)
+            console.log('[INDEX]', upIndex, req.params.orderId)
+            const newLista = [...lista.orders]
+            delete newLista[upIndex]
+            lista.orders = newLista
+            console.log('[ORDERS]', lista.orders)
+            lista.save()
+            res.status(200).json(lista)
         })
 }
