@@ -26,14 +26,14 @@ const Lista = (props) => {
             .catch( err => {
                 console.log('[FIRST_ERR]', err)
             })
-            axios.get(`http://192.168.1.12:8080/lista/lista/${props.match.params.id}`)
-            .then( res => {
-                console.log(res.data)
-                setListName(res.data.name)
-                setListId(res.data._id)
-                setItems(res.data.orders)
-            })
-            .catch(err => console.log('[SECOND_ERR]', err))
+            //axios.get(`http://192.168.1.12:8080/lista/lista/${props.match.params.id}`)
+            //.then( res => {
+                //console.log(res.data)
+                //setListName(res.data.name)
+                //setListId(res.data._id)
+                //setItems(res.data.orders)
+            //})
+            //.catch(err => console.log('[SECOND_ERR]', err))
         }, [update])
 
 
@@ -74,7 +74,7 @@ const Lista = (props) => {
 
         if (parsed !== null){
             setItems([...items,{item:{name: parsed[0]}, q: parsed[1]}])
-            axios.post(`http://localhost:8080/lista/posttolista/${listId}`, {name: parsed[0] ,q: parsed[1]})
+            axios.post(`posttolista/${listId}`, {name: parsed[0] ,q: parsed[1]})
                 .then(res => console.log(res))
                 .catch(err => console.log(err))
 

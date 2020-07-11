@@ -19,12 +19,12 @@ const Listas = (props) => {
                 setListas(res.data)
             })
             .catch(err => console.log('[FIRST_ERR]', err))
-        axios.get(`http://192.168.1.12:8080/lista/listas`)
-            .then( res => {
-                console.log(res.data)
-                setListas(res.data)
-            })
-            .catch(err => console.log('[SECOND_ERR]', err))
+        //axios.get(`http://192.168.1.12:8080/lista/listas`)
+            //.then( res => {
+                //console.log(res.data)
+                //setListas(res.data)
+            //})
+            //.catch(err => console.log('[SECOND_ERR]', err))
     }, [update])
 
     const instances = listas.map( lista => (

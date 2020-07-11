@@ -27,15 +27,15 @@ const Login = (props) => {
             })
             .catch(err => {
                 console.log(err)
-                axios.post(`http://192.168.1.12:8080/auth/login`, {username: username, password: password})
-                    .then(res => {
-                        console.log(res.data)
-                        props.setToken(res.data.token)
-                        localStorage.clear()
-                        localStorage.setItem('token', JSON.stringify(res.data.token))
-                        props.history.push('/listas')
-                        })
-                    .catch(err => console.log(err))
+                //axios.post(`http://192.168.1.12:8080/auth/login`, {username: username, password: password})
+                    //.then(res => {
+                        //console.log(res.data)
+                        //props.setToken(res.data.token)
+                        //localStorage.clear()
+                        //localStorage.setItem('token', JSON.stringify(res.data.token))
+                        //props.history.push('/listas')
+                        //})
+                    //.catch(err => console.log(err))
             })
     }
     return(
