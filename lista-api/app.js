@@ -3,21 +3,26 @@ const mongoose = require('mongoose')
 const cors = require('cors')
 const bodyParser = require('body-parser')
 
+//production
+const helmet = require('helmet')
+const compression = require('compression')
+
 const listaRoutes = require('./routes/lista')
 const authRoutes = require('./routes/auth')
 
 app = express()
 
+app.use(helmet())
 app.use(cors())
 
 app.use(bodyParser.json()) // to be able to parse json data from req.body
 app.use('/lista', listaRoutes)
 app.use('/auth', authRoutes)
 
-mongoose.connect('mongodb+srv://domingoAdmin:domingoAdmin36@cluster0.0aa3g.mongodb.net/lista?retryWrites=true&w=majority',{useUnifiedTopology: true, useNewUrlParser: true})
+mongoose.connect(`mongodb+srv://${process.env.MONGO_USER}:${process.env.MONGO_PW}@cluster0.0aa3g.mongodb.net/${process.env.MONGO_DB}?retryWrites=true&w=majority`,{useUnifiedTopology: true, useNewUrlParser: true})
     .then(res => {
         //console.log('[DB_CONNECTED]', res)
-        app.listen(8080)
+        app.listen(process.env.PORT || 8080)
     })
     .catch(err => console.log('[DB_ERROR]', err))
 
