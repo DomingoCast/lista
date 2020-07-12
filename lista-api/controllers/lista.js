@@ -102,14 +102,18 @@ exports.getListas = (req, res, next) => {
 }
 
 exports.postLista = (req, res, next) => {
-    const lista = new Ingredient({
+    const lista = new Lista({
         name: req.body.name,
+        users: [ObjectId(req.userId)],
         lista: []
     })
     lista
         .save()
         .then(res => console.log('[lista_SAVED]', res))
-        .catch(err => console.log('[lista_ERR]', err))
+        .catch(err => {
+            console.log('[lista_ERR]', err)
+            res.status(400).json(err)
+        })
     res.status(201).json({
         message: "succesfully added post",
         data: lista
