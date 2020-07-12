@@ -32,18 +32,7 @@ const Lista = (props) => {
                 console.log('[FIRST_ERR]', err)
             })
         console.log('algo?')
-            //axios.get(`http://192.168.1.12:8080/lista/lista/${props.match.params.id}`)
-            //.then( res => {
-                //console.log(res.data)
-                //setListName(res.data.name)
-                //setListId(res.data._id)
-                //setItems(res.data.orders)
-            //})
-            //.catch(err => console.log('[SECOND_ERR]', err))
         }, [update, props])
-
-
-
 
     const handleSubmit = (parsed) => {
 
@@ -155,6 +144,7 @@ const Lista = (props) => {
             <Hitbox
                 type="order"
                 submit={(parsed) => handleSubmit(parsed)}
+                goBack={props.history.goBack}
             />
         </div>
     )

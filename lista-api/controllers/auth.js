@@ -22,31 +22,27 @@ exports.login = (req, res, next) => {
     User.findOne({username: username})
         .then(user => {
             if(!user){
-                res.status(400).json('{msg: user not found}') //400 porque es bad request
+                console.log('[USER NOT FOUND]')
+                //res.send({msg: 'user not found'})
+                res.status(400).json({msg: 'user not found'})
             } else {
+                console.log('[MATCHED]')
                 bcrypt.compare(password, user.password)
-                    //.then(hashedPw => {
-                        //if(hashedPw !== user.password){
-                            //res.status(400).json('{msg: wrong password}') //400 porque es bad request
-                        //} else {
-                            //const token = jwt.sign({
-                                //username: user.username,
-                                //userId: user._id.toString()
-                            //}, 'domixulako36, pero sin chinos eh, por favor que a mi hong kong no me lo toquen',
-                                //{expiresIn: '1h'})
-                            //res.status(200).json({token: token})
-                        //}
-                    //})
                     .then( s => {
-                        const token = jwt.sign({
-                            username: user.username,
-                            userId: user._id.toString()
-                        }, 'esto es una prueba, mejor no pongo mi contra se!~_na de verdad, que no quiero k m .1!#$hakdxxeen',
-                            {expiresIn: '1h'})
-                        res.status(200).json({token: token})
+                        if(s){
+                            const token = jwt.sign({
+                                username: user.username,
+                                userId: user._id.toString()
+                            }, 'esto es una prueba, mejor no pongo mi contra se!~_na de verdad, que no quiero k m .1!#$hakdxxeen',
+                                {expiresIn: '1h'})
+                            res.status(200).json({token: token})
+                        } else {
+                            console.log('[WRONG PASSWORD]')
+                            res.status(400).json({msg: 'wrong password'}) //400 porque es bad request
+                        }
                     })
                     .catch(err => {
-                        res.status(400).json('{msg: wrong password}') //400 porque es bad request
+                        res.status(400).json({msg: 'wrong password'}) //400 porque es bad request
                     })
             }
         })

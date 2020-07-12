@@ -11,20 +11,20 @@ import classes from './Auth.module.sass'
 
 const Login = (props) => {
 
-    const handleSubmit = () => {
+    async handleSubmit = () => {
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
-        axios.post('login', {
+        let response = await axios.post('login', {
             username: username,
             password: password
         })
-            .then(res => {
-                console.log(res.data)
-                props.setToken(res.data.token)
-                localStorage.setItem('token', JSON.stringify(res.data.token))
-                props.history.push('/listas')
-            })
-            .catch(err => console.log(err))
+            /*.then(res => {*/
+                /*console.log(res.data)*/
+                /*props.setToken(res.data.token)*/
+                /*localStorage.setItem('token', JSON.stringify(res.data.token))*/
+                /*props.history.push('/listas')*/
+            /*})*/
+                /*.catch(err => console.log(err.body))*/
     }
     return(
         <div className={classes.bigContainer}>
