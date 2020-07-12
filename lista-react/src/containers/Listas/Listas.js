@@ -40,6 +40,7 @@ const Listas = (props) => {
         }
     }
 
+
     return (
         <div className={classes.bigContainer}>
         <div className={classes.itemsContainer}>
@@ -48,6 +49,7 @@ const Listas = (props) => {
         <Hitbox
             type="lista"
             submit={(parsed) => handleSubmit(parsed)}
+            goBack={props.history.goBack}
         />
         </div>
 
