@@ -16,6 +16,8 @@ const Lista = (props) => {
 
     useEffect(() => {
         console.log(props)
+        const storedToken = JSON.parse(localStorage.getItem('token'))
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken
         axios.get(`lista/${props.match.params.id}`)
             .then( res => {
                 console.log('[RESPONSE]', res.data)
@@ -67,7 +69,6 @@ const Lista = (props) => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        axios.defaults.baseURL = ''
         const value = document.querySelector('#searchInput').value
 
         const parsed = parseInput(value) // parsed[0] = name, parsed[1] = q
@@ -94,16 +95,18 @@ const Lista = (props) => {
     }
 
 
-    const increase = (id, index) => {
+    const increase = (id, index, q) => {
         const newItems = [...items]
         const newOrder = {...newItems[index]}
-        newOrder.q += 1
+        console.log('[INCRESE LISTA]', newOrder, q+1)
+        newOrder.q = q+1
         newItems[index] = newOrder
         setItems(newItems)
         if(newOrder.q > 0){
             newOrder.status = null
         }
-        updateOrder(index, newOrder)
+        updateOrder(newOrder)
+        return q + 1
     }
 
     const decrease = (id, index) => {
@@ -137,7 +140,7 @@ const Lista = (props) => {
                 lid={item._id}
                 q={item.q}
                 status={item.status}
-                increase={ () => increase(item._id, index) }
+                increase={ (e) => increase(item._id, index, e) }
                 decrease={ () => decrease(item._id, index) }
                //setQ={ () => setQ(index) }
         />

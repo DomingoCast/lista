@@ -15,6 +15,7 @@ const Item = (props) => {
     const [lwait, setLwait] = useState(null)
     const [q, setQ] = useState(props.q)
     const [borradoClass, setBorradoClass] = useState(null)
+    const [gotIn, setIn] = useState(false)
     //const [touched, setTouched] = useState(null)
 
 
@@ -27,8 +28,12 @@ const Item = (props) => {
 
     const increaseQ = (theQ) => {
         console.log('[INCREASE]')
+        console.log('[Q]', q)
         clearTimeout(lwait)
-        props.increase()
+        const newQ = props.increase(q)
+        console.log(newQ)
+        setQ(newQ)
+
     }
 
     const decreaseQ = () =>{
@@ -57,10 +62,11 @@ const Item = (props) => {
                 document.documentElement.style
                     .setProperty('--trans-time', `0s`);
             } else {
-                setMaxed(maxi)
-                //console.log('[OUT]', timer)
-                //console.log(timer)
-                //console.log('[waiting out]', waiting)
+                if(gotIn){
+                    setMaxed(2)
+                } else {
+                    setMaxed(maxi)
+                }
                 if(!waiting){
                     console.log('[Q]',props.q)
                     //console.log(timer)
@@ -71,6 +77,7 @@ const Item = (props) => {
 
                     lmao = setTimeout( () => {
                         setWaiting(false)
+                        setIn(true)
                         //setMaxed(2)
                         console.log('[MAX]', maxed)
                         //console.log('[IN]', waiting, tiempo)
@@ -92,6 +99,7 @@ const Item = (props) => {
         //console.log('[TE]')
         setMaxed(0)
         setTouch(false)
+        setIn(false)
         clearTimeout(lwait)
         //console.log('ya')
         setWaiting(false)
