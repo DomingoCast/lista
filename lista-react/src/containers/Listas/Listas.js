@@ -13,7 +13,8 @@ const Listas = (props) => {
     const [update, setUpdate] = useState(false)
 
     useEffect(() => {
-        console.log('smth?')
+        const storedToken = JSON.parse(localStorage.getItem('token'))
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken
         axios.get('listas')
             .then(res => {
                 setListas(res.data)

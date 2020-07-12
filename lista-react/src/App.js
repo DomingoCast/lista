@@ -12,21 +12,18 @@ import Singup from './containers/Auth/Singup'
 
 //import { connect, dispatch } from 'react-redux'
 
-//import axios from 'axios'
-//import axiosAuth from './axios-instances/axios-auth'
-//import axiosLista from './axios-instances/axios-lista'
+import axios from 'axios'
+import axiosAuth from './axios-instances/axios-auth'
+import axiosLista from './axios-instances/axios-lista'
 
 function App(props) {
-    //localStorage.setItem('mama', JSON.stringify('uuuuu'))
-    //const storedToken = JSON.parse(localStorage.getItem('token'))
-    //const storedMama = JSON.parse(localStorage.getItem('mama'))
-    //console.log('[STORED]', storedToken, storedMama)
+    const storedToken = JSON.parse(localStorage.getItem('token'))
 
-    //axios.defaults.headers.common['Authorization'] = props.token
-    //axiosAuth.defaults.headers.common['Authorization'] = props.token
-    //axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken
-    //axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + props.token
-    //console.log('[TOKEN APP]', props.token)
+    axios.defaults.headers.common['Authorization'] = props.token
+    axiosAuth.defaults.headers.common['Authorization'] = props.token
+    axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken
+    axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + props.token
+    console.log('[TOKEN APP]', props.token)
   return (
         <>
             <Switch>
