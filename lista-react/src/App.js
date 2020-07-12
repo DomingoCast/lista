@@ -25,7 +25,7 @@ function App(props) {
     axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + props.token
     console.log('[TOKEN APP]', props.token)
   return (
-        <>
+        <div className="App">
             <Switch>
                 <Route path="/prueba" component={Prueba}/>
                 <Route path="/login" component={Login}/>
@@ -36,7 +36,7 @@ function App(props) {
 
                 <Redirect from="/" to="/start"/>
             </Switch>
-        </>
+        </div>
   );
 }
 //const mapState = (state ) => ({

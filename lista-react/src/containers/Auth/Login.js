@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 
 import { Link } from 'react-router-dom'
 import axios from '../../axios-instances/axios-auth'
@@ -10,6 +10,15 @@ import Input from '../../components/Input/Input'
 import classes from './Auth.module.sass'
 
 const Login = (props) => {
+    const [update, setUpdate] = useState(false)
+
+    useEffect(() => {
+        console.log('wasap')
+        //window.scrollTo(0,window.innerHeight)
+        //window.scrollTo(0,0)
+        //window.scrollTo(0,window.innerHeight)
+        //document.querySelector('#loginContainer').requestFullscreen()
+    })
 
     const handleSubmit = () => {
         const username = document.getElementById('username').value
@@ -19,6 +28,7 @@ const Login = (props) => {
             password: password
         })
             .then(res => {
+                document.exitFullscreen()
                 console.log(res.data)
                 props.setToken(res.data.token)
                 localStorage.clear()
@@ -39,7 +49,7 @@ const Login = (props) => {
             })
     }
     return(
-        <div className={classes.bigContainer}>
+        <div id="loginContainer" className={classes.bigContainer}>
             <form className={classes.form}>
                 <h1 className={classes.h1}>log in</h1>
                 <div className={classes.inputContainer}>

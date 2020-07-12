@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import classes from './Item.module.sass'
 
+import { connect, dispatch } from 'react-redux'
+
 const Item = (props) => {
 
     const [x, setX] = useState(null)
@@ -13,7 +15,7 @@ const Item = (props) => {
     const [touch, setTouch] = useState(false)
     const [update, setUpdate] = useState(false)
     const [lwait, setLwait] = useState(null)
-    const [q, setQ] = useState(props.q)
+    //const [q, setQ] = useState(props.q)
     const [borradoClass, setBorradoClass] = useState(null)
     const [gotIn, setIn] = useState(false)
     //const [touched, setTouched] = useState(null)
@@ -22,30 +24,35 @@ const Item = (props) => {
     //useEffect(() => {
         //console.log('macarrones', q)
         //if (q < 0){
-            //cosas = null
         //}
-    //})
+    //}, [q, props])
 
-    const increaseQ = (theQ) => {
+    const increaseQ = (q) => {
         console.log('[INCREASE]')
-        console.log('[Q]', q)
-        clearTimeout(lwait)
-        const newQ = props.increase(q)
-        console.log(newQ)
-        setQ(newQ)
+        //console.log('[Q]', q)
+        //clearTimeout(lwait)
+        //const newQ = props.increase(q)
+        return props.increase(q)
+        //console.log(newQ)
+        //setQ(newQ)
 
     }
 
-    const decreaseQ = () =>{
+    const decreaseQ = (q) =>{
         console.log('[DECREASE]')
-        if(props.q === 1){
-            document.documentElement.style
-                .setProperty('--trans-time', '.2s')
-        }
-        props.decrease()
+        //if(props.q === 1){
+            //document.documentElement.style
+                //.setProperty('--trans-time', '.2s')
+        //}
+        return props.decrease(q)
+        //if (response === 'bought'){
+            //handleTE()
+        //} else {
+            //return response
+        //}
     }
 
-    const handleTM = (e, tiempoF = tiempo, maxi = 1) => {
+    const handleTM = (e, tiempoF = tiempo, maxi = 1, q = props.q) => {
         setTouch(true)
         setSwipingClass(classes.swiping)
 
@@ -68,25 +75,36 @@ const Item = (props) => {
                     setMaxed(maxi)
                 }
                 if(!waiting){
-                    console.log('[Q]',props.q)
+                    //console.log('[Q]',props.q)
                     //console.log(timer)
-                    transform < 0 ? increaseQ(q) : decreaseQ(q)
+                    let mientrasQ
+                    console.log('[WABA]', maxi, q)
+
+                    if (transform < 0){
+                        mientrasQ = increaseQ(q)
+                    } else if(!(maxi === 2 && q === 0)){
+                        console.log('[IN]')
+                        mientrasQ = decreaseQ(q)
+                    } else{
+                        mientrasQ = 0
+                    }
+
                     setWaiting(true)
                     let lmao
                     let elTiempo = tiempoF - tiempoF/3
+                    if(mientrasQ !== 0){
+                        lmao = setTimeout( () => {
+                            setWaiting(false)
+                            setIn(true)
+                            //setMaxed(2)
+                            //console.log('[MAX]', maxed)
+                            //console.log('[IN]', waiting, tiempo)
+                            handleTM(e, elTiempo, 2, mientrasQ)
+                        },tiempoF)
+                    }
 
-                    lmao = setTimeout( () => {
-                        setWaiting(false)
-                        setIn(true)
-                        //setMaxed(2)
-                        console.log('[MAX]', maxed)
-                        //console.log('[IN]', waiting, tiempo)
-                        handleTM(e, elTiempo, 2)
-
-                    },tiempoF)
                     setLwait(lmao)
                     //console.log('[TIEMPO]', tiempo)
-
                 }
             }
         }
@@ -96,7 +114,8 @@ const Item = (props) => {
 
     const handleTE = () => {
         //console.log('[TIEMPO]', tiempo)
-        //console.log('[TE]')
+        console.log('[TE]')
+        props.setQ('null')
         setMaxed(0)
         setTouch(false)
         setIn(false)
@@ -123,4 +142,16 @@ const Item = (props) => {
         </div>
     )
 }
-export default Item
+
+const mapState = (state) => ({
+    currQ: state.currQ
+})
+
+const mapActions = (dispatch) => ({
+    setQ: (currQ) => dispatch({type: 'SET_Q', currQ: currQ})
+
+})
+//const mapActions = (dispatch) => ({
+//})
+//
+export default connect(mapState, mapActions)(Item)

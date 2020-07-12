@@ -1,5 +1,6 @@
 const initialState = {
-    token: 'camarelos'
+    token: 'camarelos',
+    currQ: 'null'
 }
 
 const reducer = (state = initialState, action) => {
@@ -13,6 +14,11 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 token: null
+            }
+        case 'SET_Q':
+            return {
+                ...state,
+                currQ: action.currQ
             }
         default:
             return state

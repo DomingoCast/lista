@@ -2,8 +2,8 @@ import React, { useState, useEffect } from 'react'
 
 import axios from '../../axios-instances/axios-lista'
 
-//import ListInstance from '../../components/ListInstance/ListInstance'
 import ListInstance from '../../components/ListInstance/ListInstance'
+import Hitbox from '../../components/Hitbox/Hitbox'
 
 import classes from './Listas.module.sass'
 
@@ -32,9 +32,23 @@ const Listas = (props) => {
         <ListInstance name={lista.name} key={lista._id} listaId={lista._id}/>
     ))
 
+    const handleSubmit = (parsed) => {
+        if (parsed !== null){
+            axios.post(`postlista`, {name: parsed})
+                .then(res => console.log(res))
+                .catch(err => console.log(err))
+        }
+    }
+
     return (
+        <div className={classes.bigContainer}>
         <div className={classes.itemsContainer}>
             {instances}
+        </div>
+        <Hitbox
+            type="lista"
+            submit={(parsed) => handleSubmit(parsed)}
+        />
         </div>
 
     )
