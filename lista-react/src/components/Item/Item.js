@@ -13,10 +13,8 @@ const Item = (props) => {
     const [tiempo, setTiempo] = useState(500)
     const [waiting, setWaiting] = useState(false)
     const [touch, setTouch] = useState(false)
-    const [update, setUpdate] = useState(false)
     const [lwait, setLwait] = useState(null)
     //const [q, setQ] = useState(props.q)
-    const [borradoClass, setBorradoClass] = useState(null)
     const [gotIn, setIn] = useState(false)
     //const [touched, setTouched] = useState(null)
 
@@ -28,28 +26,12 @@ const Item = (props) => {
     //}, [q, props])
 
     const increaseQ = (q) => {
-        console.log('[INCREASE]')
-        //console.log('[Q]', q)
-        //clearTimeout(lwait)
-        //const newQ = props.increase(q)
         return props.increase(q)
-        //console.log(newQ)
-        //setQ(newQ)
-
     }
 
     const decreaseQ = (q) =>{
         console.log('[DECREASE]')
-        //if(props.q === 1){
-            //document.documentElement.style
-                //.setProperty('--trans-time', '.2s')
-        //}
         return props.decrease(q)
-        //if (response === 'bought'){
-            //handleTE()
-        //} else {
-            //return response
-        //}
     }
 
     const handleTM = (e, tiempoF = tiempo, maxi = 1, q = props.q) => {
@@ -75,8 +57,6 @@ const Item = (props) => {
                     setMaxed(maxi)
                 }
                 if(!waiting){
-                    //console.log('[Q]',props.q)
-                    //console.log(timer)
                     let mientrasQ
                     console.log('[WABA]', maxi, q)
 
