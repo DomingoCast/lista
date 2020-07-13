@@ -1,6 +1,11 @@
 const initialState = {
     token: 'camarelos',
-    currQ: 'null'
+    currQ: 'null',
+    popup: {
+        display: false,
+        text: '',
+        type: null
+    }
 }
 
 const reducer = (state = initialState, action) => {
@@ -19,6 +24,14 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 currQ: action.currQ
+            }
+        case 'SET_POPUP':
+            return {
+                ...state,
+                popup: {
+                    ...state.popup,
+                    ...action.popData
+                }
             }
         default:
             return state

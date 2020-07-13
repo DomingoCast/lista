@@ -16,6 +16,8 @@ import axios from 'axios'
 import axiosAuth from './axios-instances/axios-auth'
 import axiosLista from './axios-instances/axios-lista'
 
+import Layout from './hoc/Layout/Layout'
+
 function App(props) {
     const storedToken = JSON.parse(localStorage.getItem('token'))
 
@@ -25,7 +27,7 @@ function App(props) {
     axiosLista.defaults.headers.common['Authorization'] = 'Bearer ' + props.token
     console.log('[TOKEN APP]', props.token)
   return (
-        <div className="App">
+        <Layout>
             <Switch>
                 <Route path="/prueba" component={Prueba}/>
                 <Route path="/login" component={Login}/>
@@ -36,7 +38,7 @@ function App(props) {
 
                 <Redirect from="/" to="/start"/>
             </Switch>
-        </div>
+        </Layout>
   );
 }
 //const mapState = (state ) => ({

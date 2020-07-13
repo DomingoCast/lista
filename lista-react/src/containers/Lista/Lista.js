@@ -136,7 +136,7 @@ const Lista = (props) => {
 
     //{/* onFocus={handleDBL} onBlur={handleDBL} */}
     return(
-        <div className={classes.bigContainer}>
+        <>
             <h1 className={classes.h1}>{listName}</h1>
             <div id={listId} className={classes.itemsContainer}>
                 {listItems}
@@ -146,7 +146,7 @@ const Lista = (props) => {
                 submit={(parsed) => handleSubmit(parsed)}
                 goBack={props.history.goBack}
             />
-        </div>
+        </>
     )
 }
 

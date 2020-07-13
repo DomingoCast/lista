@@ -5,6 +5,8 @@ import axios from '../../axios-instances/axios-lista'
 import ListInstance from '../../components/ListInstance/ListInstance'
 import Hitbox from '../../components/Hitbox/Hitbox'
 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+
 import classes from './Listas.module.sass'
 
 const Listas = (props) => {
@@ -17,15 +19,10 @@ const Listas = (props) => {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + storedToken
         axios.get('listas')
             .then(res => {
+                console.log('[RES]', res)
                 setListas(res.data)
             })
             .catch(err => console.log('[FIRST_ERR]', err))
-        //axios.get(`http://192.168.1.12:8080/lista/listas`)
-            //.then( res => {
-                //console.log(res.data)
-                //setListas(res.data)
-            //})
-            //.catch(err => console.log('[SECOND_ERR]', err))
     }, [update])
 
     const instances = listas.map( lista => (
@@ -42,18 +39,18 @@ const Listas = (props) => {
 
 
     return (
-        <div className={classes.bigContainer}>
-        <div className={classes.itemsContainer}>
-            {instances}
-        </div>
-        <Hitbox
-            type="lista"
-            submit={(parsed) => handleSubmit(parsed)}
-            goBack={props.history.goBack}
-        />
-        </div>
+        <>
+            <div className={classes.itemsContainer}>
+                {instances}
+            </div>
+            <Hitbox
+                type="lista"
+                submit={(parsed) => handleSubmit(parsed)}
+                goBack={props.history.goBack}
+            />
+        </>
 
     )
 }
 
-export default Listas
+export default withErrorHandler(Listas, axios)

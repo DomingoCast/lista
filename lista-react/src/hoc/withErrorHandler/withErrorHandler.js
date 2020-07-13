@@ -1,46 +1,60 @@
 import React, {Component} from 'react'
-import Popup from '../../components/Popup/Popup'
+
+import { connect, dispatch } from 'react-redux'
 
 const withErrorHandler = (WrappedComponent, axios) => {
-    return class extends Component {
-        state = {
-            error: null
-        }
-        componentWillMount(){
-            this.reqInterceptor = axios.interceptors.request.use(req => {
-                this.setState({error: null})
-                return req
-            })
-            this.resInterceptop= axios.interceptors.response.use(res => console.log('[RES]', res), error => {
-                this.setState({ error: error})
-                console.log('[ERROR]', error, error.data)
-                setTimeout(() => {
-                    this.setState({ error: null})
-                }, 5000)
-            })
-        }
+    return (connect(null, mapActions)(
+        class extends Component {
+                componentWillMount(){
+                    this.reqInterceptor = axios.interceptors.request.use(req => {
+                        this.props.setPopup({
+                            display: true,
+                            text: "loading...",
+                            type: "loading"
+                        })
+                        return req
+                    })
+                    this.resInterceptop= axios.interceptors.response.use(res =>{
+                        this.props.setPopup({
+                            display: false
+                        })
+                        return res
 
-        componentWillUnmount(){
-            axios.interceptors.request.eject(this.reqIterceptor)
-            axios.interceptors.response.eject(this.resIterceptor)
-        }
+                    }, error => {
+                        console.log('[ERROR]', error)
+                        this.props.setPopup({
+                            display: true,
+                            text: error.response ? error.response.data.msg : error.message,
+                            type: "error"
+                        })
+                        setTimeout(() => {
+                            this.props.setPopup({
+                                display: false
+                            })
+                        }, 5000)
+                    })
+                }
 
-        errorConfirmedHandler = () => {
-            this.setState({error: null})
-        }
+                componentWillUnmount(){
+                    axios.interceptors.request.eject(this.reqIterceptor)
+                    axios.interceptors.response.eject(this.resIterceptor)
+                }
 
-        render(){
-            return(
-                <>
-                    <Popup type="error" display={this.state.error}>
-                        { this.state.error ? (this.state.error.response ? this.state.error.response.data.msg : this.state.error.message) : null}
-                    </Popup>
+                render(){
+                    return(
+                        <>
+                            <WrappedComponent {...this.props}/>
+                        </>
+                    )
+                }
+            }
+    ))}
 
-                    <WrappedComponent {...this.props}/>
-                </>
-            )
-        }
+const mapActions = (dispatch) => {
+    return{
+        setPopup: (popData) => dispatch({type: 'SET_POPUP', popData: popData})
     }
 }
 
+//export default connect(null, mapActions)(withErrorHandler)
 export default withErrorHandler

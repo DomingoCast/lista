@@ -6,7 +6,7 @@ import Button from '../Button/Button'
 
 const Start = (props) =>{
     const buttonClick = () => {
-        document.querySelector(".App").requestFullscreen()
+        document.querySelector("#bigContainer").requestFullscreen()
         props.history.push('/login')
     }
     //useEffect(() => {

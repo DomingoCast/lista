@@ -24,17 +24,19 @@ const Singup = (props) => {
         .catch(err => console.log(err))
     }
     return(
-        <div className={classes.bigContainer}>
-            <h1 className={classes.h1}>sing up</h1>
-            <div className={classes.inputContainer}>
-                <Input type="username"/>
-                <Input type="doublePassword"/>
+        <>
+            <div className={classes.loginContainer}>
+                <h1 className={classes.h1}>sing up</h1>
+                <div className={classes.inputContainer}>
+                    <Input type="username"/>
+                    <Input type="doublePassword"/>
+                </div>
+                <div className={classes.block3}>
+                    <Button className={classes.button} type="main" text="sing up" click={handleSubmit}/>
+                    <Link className={classes.link} to='/login'>log in</Link>
+                </div>
             </div>
-            <div className={classes.block3}>
-                <Button className={classes.button} type="main" text="sing up" click={handleSubmit}/>
-                <Link className={classes.link} to='/login'>log in</Link>
-            </div>
-        </div>
+        </>
     )
 }
 
