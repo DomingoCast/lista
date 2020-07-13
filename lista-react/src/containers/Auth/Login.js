@@ -8,6 +8,8 @@ import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 import Popup from '../../components/Popup/Popup'
 
+import realVh from '../../util/real-vh'
+
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
 import classes from './Auth.module.sass'
@@ -21,7 +23,8 @@ const Login = (props) => {
         console.log('wasap')
     })
 
-    const handleSubmit = async () => {
+    const handleSubmit = async (e) => {
+        e.preventDefault()
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
         try {
@@ -43,14 +46,16 @@ const Login = (props) => {
             console.log('emosido enganiado')
         }
     }
+    realVh()
     return(
         <>
             <div className={classes.loginContainer}>
-                <form className={classes.form}>
+                <form onSubmit={handleSubmit} className={classes.form}>
                     <h1 className={classes.h1}>log in</h1>
                     <div className={classes.inputContainer}>
                         <Input type="username"/>
                         <Input type="password"/>
+                        <input className={classes.submitHidden} type="submit"/>
                     </div>
                     <div className={classes.block3}>
                         <Button className={classes.button} type="main" text="log in" click={handleSubmit}/>

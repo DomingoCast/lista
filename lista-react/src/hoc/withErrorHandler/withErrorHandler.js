@@ -8,7 +8,7 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 componentWillMount(){
                     this.reqInterceptor = axios.interceptors.request.use(req => {
                         console.log(req)
-                        if(req.url.split('/')[0] !== 'putorder'){
+                        if(req.url.split('/')[0] !== 'putorder' && req.url.split('/')[0] !== 'posttolista'){
                             this.props.setPopup({
                                 display: true,
                                 text: "loading...",

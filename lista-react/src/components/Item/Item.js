@@ -8,6 +8,7 @@ const Item = (props) => {
     const [x, setX] = useState(null)
     const [transform, setTransform] = useState(0)
     const [cap, setCap] = useState(50)
+    const [min, setMin] = useState(5)
     const [swipingClass, setSwipingClass] = useState(null)
     const [maxed, setMaxed] = useState(0) // 0 para no, 1 para maxed, 2 para maxed y ha aguantado
     const [tiempo, setTiempo] = useState(500)
@@ -46,10 +47,12 @@ const Item = (props) => {
         } else {
             if (Math.abs(transform) <= cap){
                 setTransform(e.touches[0].clientX - x)
-                document.documentElement.style
-                    .setProperty('--transform', `${transform}px`);
-                document.documentElement.style
-                    .setProperty('--trans-time', `0s`);
+                if(Math.abs(transform) >= min){
+                    document.documentElement.style
+                        .setProperty('--transform', `${transform}px`);
+                    document.documentElement.style
+                        .setProperty('--trans-time', `0s`);
+                }
             } else {
                 if(gotIn){
                     setMaxed(2)

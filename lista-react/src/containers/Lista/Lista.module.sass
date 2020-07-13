@@ -7,11 +7,31 @@
     margin-bottom: 1.7rem
 
 .itemsContainer
+    padding: 1rem 0
     display: flex
     flex-flow: column
     align-items: center
     height: 70%
-    overflow: hidden
+    overflow-y: scroll
+    overflow-x: hidden
+    transition: all .5s
+
     //border: 3px solid blue
+    &::-webkit-scrollbar
+        display: none
+
+.scrollTop
+    border-bottom: 1px solid var(--grey-light-2)
+.scrollBottom
+    border-top: 1px solid var(--grey-light-2)
+
+.scrollMiddle
+    border-bottom: 1px solid var(--grey-light-2)
+    border-top: 1px solid var(--grey-light-2)
+
+
+    //overflow
+    //background-clip: text
+    //background: linear-gradient(to bottom, var(--black) 0%,var(--black) 70%, var(--grey-light-2))
 
 

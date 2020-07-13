@@ -11,6 +11,7 @@ import Login from './containers/Auth/Login'
 import Singup from './containers/Auth/Singup'
 
 //import { connect, dispatch } from 'react-redux'
+import realVh from './util/real-vh'
 
 import axios from 'axios'
 import axiosAuth from './axios-instances/axios-auth'
@@ -19,6 +20,7 @@ import axiosLista from './axios-instances/axios-lista'
 import Layout from './hoc/Layout/Layout'
 
 function App(props) {
+    realVh()
     const storedToken = JSON.parse(localStorage.getItem('token'))
 
     axios.defaults.headers.common['Authorization'] = props.token

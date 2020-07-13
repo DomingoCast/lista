@@ -11,11 +11,14 @@ import Hitbox from '../../components/Hitbox/Hitbox'
 
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
+import realVh from '../../util/real-vh'
+
 
 const Lista = (props) => {
     const [items, setItems] = useState([])
     const [listName, setListName] = useState("")
     const [listId, setListId] = useState("")
+    const [scroll, setScroll] = useState('null')
 
     const [update, setUpdate] = useState(0)
 
@@ -29,12 +32,16 @@ const Lista = (props) => {
                 setListName(res.data.name)
                 setListId(res.data._id)
                 setItems(res.data.orders)
+
             })
             .catch( err => {
                 console.log('[FIRST_ERR]', err)
             })
         console.log('algo?')
         }, [update, props])
+    useEffect(() => {
+        handleScroll()
+    }, [items])
 
     const handleSubmit = (parsed) => {
 
@@ -65,22 +72,6 @@ const Lista = (props) => {
 
         const newItems = [...items]
         const newOrder = {...newItems[index]}
-
-
-        //if(props.currQ === "null"){
-            //console.log('[NULL]')
-            //laQ = newOrder.q + 1
-            //props.setQ(laQ)
-            //setUpdate(update * (-1))
-        //} else {
-            //console.log('[NOT NULL]')
-            //const lred = props.currQ
-            //laQ = props.currQ + 1
-            //props.setQ(laQ)
-            //console.log('[REDUX]', lred, laQ, props.currQ)
-        //}
-
-        //newOrder.q = laQ
         newOrder.q = q + 1
 
         console.log('[INCRESE LISTA]', props.currQ)
@@ -136,11 +127,39 @@ const Lista = (props) => {
         />
     ))
 
+    const handleScroll = () => {
+        console.log('[POR QE PASAS SE IIIIII]')
+        //const element = document.getElementById(listId.toString())
+        const element = document.querySelector("."+classes.itemsContainer)
+        console.log('[HOLLLLLLLLLLLA]', element.scrollHeight, element.clientHeight)
+        //let scrollClass
+        //console.log('[heights]', element.scrollHeight - element.scrollTop, element.clientHeight)
+        if (element.scrollHeight === element.clientHeight){
+            if(scroll !== null){
+                setScroll(null)
+            }
+        }else if(element.scrollTop === 0){
+            if(scroll !== classes.scrollTop){
+                setScroll(classes.scrollTop)
+            }
+        }else if(Math.round(element.scrollHeight - element.scrollTop) === element.clientHeight){
+            if(scroll !== classes.scrollBottom){
+                setScroll(classes.scrollBottom)
+            }
+        }else if(element.clientHeight ){
+            if(scroll !== classes.scrollMiddle){
+                setScroll(classes.scrollMiddle)
+            }
+        }
+    }
+
+    realVh()
+
     //{/* onFocus={handleDBL} onBlur={handleDBL} */}
     return(
         <>
             <h1 className={classes.h1}>{listName}</h1>
-            <div id={listId} className={classes.itemsContainer}>
+            <div id={listId} onScroll={handleScroll} className={classes.itemsContainer + ' ' + scroll}>
                 {listItems}
             </div>
             <Hitbox

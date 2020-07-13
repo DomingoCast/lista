@@ -3,8 +3,15 @@ import React, {useEffect} from 'react'
 import classes from './Start.module.sass'
 
 import Button from '../Button/Button'
+import realVh from '../../util/real-vh'
 
 const Start = (props) =>{
+
+    realVh()
+    //let totalVh = window.innerHeight
+    //console.log(totalVh)
+    //document.documentElement.style.setProperty('--totalVh', totalVh+'px')
+
     const buttonClick = () => {
         document.querySelector("#bigContainer").requestFullscreen()
         props.history.push('/login')
