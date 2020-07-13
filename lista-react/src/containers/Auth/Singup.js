@@ -6,6 +6,8 @@ import axios from '../../axios-instances/axios-auth'
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+
 import classes from './Auth.module.sass'
 
 const Singup = (props) => {
@@ -40,4 +42,4 @@ const Singup = (props) => {
     )
 }
 
-export default Singup
+export default withErrorHandler(Singup, axios)

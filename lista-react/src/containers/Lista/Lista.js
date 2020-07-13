@@ -9,6 +9,8 @@ import classes from './Lista.module.sass'
 import Item from '../../components/Item/Item'
 import Hitbox from '../../components/Hitbox/Hitbox'
 
+import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
+
 
 const Lista = (props) => {
     const [items, setItems] = useState([])
@@ -160,4 +162,4 @@ const mapActions = (dispatch) => ({
 })
 
 
-export default connect(mapState, mapActions)(Lista)
+export default connect(mapState, mapActions)(withErrorHandler(Lista, axios))

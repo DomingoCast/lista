@@ -42,7 +42,7 @@ exports.login = (req, res, next) => {
                         }
                     })
                     .catch(err => {
-                        res.status(400).json({msg: 'wrong password'}) //400 porque es bad request
+                        res.status(500)
                     })
             }
         })
@@ -56,7 +56,7 @@ exports.postUser = (req, res, next) => {
     const password2 = req.body.password2
     validation = valSingData(username, password1, password2)
     if(validation !== 'valid'){
-        res.status(400).json(validation) //400 porque es bad request
+        res.status(400).json({msg: validation}) //400 porque es bad request}
     } else {
         User.findOne({username: username})
             .then( user => {
@@ -71,12 +71,12 @@ exports.postUser = (req, res, next) => {
                                 .then(response => res.status(201).json(response))
                                 .catch(err => res.status(500).json(err))
                         })
-                        .catch(err => res.status(500).json({err: err, msg: 'la contra, que no tira'}))
+                        .catch(err => res.status(500))//.json({msg: 'la contra, que no tira'}))
                 } else {
                     res.status(400).json({msg: 'user already exists'})
                 }
             })
-            .catch(err => res.status(500).json({err: err, msg: 'no encuentra esto'}))
+            .catch(err => res.status(500))//.json(msg: 'no encuentra esto'}))
 
     }
     //create user and save
