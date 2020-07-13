@@ -25,25 +25,10 @@ const Login = (props) => {
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
         try {
-            props.setPopup({
-                display: true,
-                text: "loading...",
-                type: "loading"
-            })
             let res= await axios.post('login', {
                 username: username,
                 password: password
             })
-            props.setPopup({
-                display: false
-            })
-            //if (!res.data.token){                  //me he estresado y ya no lo voy a hacer con errores
-                //console.log(res.data.msg)
-                ////setPText(res.data.msg)
-                ////setPDisplay(true)
-                ////console.log(popupDisplay)
-                ////setTimeout(() => {setPDisplay(false)}, 5000)
-            //} else {
 
                 if(document.fullscreenElement !== null){
                     document.exitFullscreen()
@@ -54,20 +39,8 @@ const Login = (props) => {
                 localStorage.setItem('token', JSON.stringify(res.data.token))
                 props.history.push('/listas')
 
-        //}
         } catch (error){
-            //console.log(error.response)
             console.log('emosido enganiado')
-            //props.setPopup({
-                //display: true,
-                //text: error.response ? error.response.data.msg : error.message,
-                //type: "error"
-            //})
-            //setTimeout(() => {
-                //props.setPopup({
-                    //display: false
-                //})
-            //}, 5000)
         }
     }
     return(

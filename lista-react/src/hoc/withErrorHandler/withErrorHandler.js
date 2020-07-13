@@ -32,16 +32,16 @@ const withErrorHandler = (WrappedComponent, axios) => {
                         })
                         if(error.response.status === 401){
                             this.props.history.push('/login')
-                            //console.log(this.props)
                         }
 
                         setTimeout(() => {
+                            console.log('[YAAAAAAAAAAAAA????????]')
                             this.props.setPopup({
                                 display: false
                             })
                         }, 5000)
 
-                        //return error
+                        return error //parece que hay que dejarlo asi para que funcione
                     })
                 }
 

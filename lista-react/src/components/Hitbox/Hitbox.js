@@ -1,14 +1,22 @@
 import React, { useState } from 'react'
 
+import { connect, dispatch } from 'react-redux'
+import { useHistory } from 'react-router-dom'
+
 import classes from './Hitbox.module.sass'
 
 const Hitbox = (props) => {
 
     const [x, setX] = useState(null)
     const [transform, setTransform] = useState(0)
+    const [tTimer, setTT] = useState(null)
     const [cap, setCap] = useState(50)
+    const [coor, setCoor] = useState([null, null])
+    const [onMenu, setOnMenu] = useState(false)
 
     const [focused, setFocus] = useState(false)
+
+    const history = useHistory()
 
     const handleDBL = () => {
         console.log('[FOCUS]: ',focused)
@@ -62,16 +70,45 @@ const Hitbox = (props) => {
 
     }
 
+    const handleTS = () => {
+        console.log('[TS]')
+        let timer = setTimeout(() => {
+            props.displayMenu(true)
+            setOnMenu(true)
+        }, 1000)
+        setTT(timer)
+    }
+
+    let elements = ['fullscreen', 'logout', 'donate']
     const handleTM = (e) => {
+        setCoor([e.touches[0].clientX, e.touches[0].clientY])
+        console.log('[TM]')
 
         if(!x){                 //si no hay valor de posicion anterior
             setX(e.touches[0].clientX)
-        } else {
+        } else if(!onMenu){
             if (Math.abs(transform) <= cap){
                 setTransform(e.touches[0].clientX - x)
             } else {
+                clearTimeout(tTimer)
                 console.log(props.history)
                 props.goBack()
+            }
+        } else {
+            let element = document.elementFromPoint(...coor)
+            //let element = document.elementFromPoint(e.touches[0].clientX, e.touches[0].clientY)
+            props.setHighlight(element.id)
+            //console.log(element.id)
+            for(let el of elements){
+                console.log('[COMP]', el, element.id )
+                if(element.id === el){
+                    //console.log('YA')
+                    document.getElementById(el).setAttribute("style", "font-weight:700;")
+                    //break
+                }else{
+                    //console.log('VES')
+                    document.getElementById(el).setAttribute("style", "")
+                }
             }
         }
     }
@@ -80,13 +117,33 @@ const Hitbox = (props) => {
 
     const handleTE = () => {
         //console.log('[TIEMPO]', tiempo)
+        if (onMenu){
+            const element = document.elementFromPoint(...coor)
+            console.log(element.id)
+            props.displayMenu(false)
+            switch(element.id){
+                case 'donate':
+                    console.log('MIS DINEROOOOS')
+                    break
+                case 'fullscreen':
+                    document.querySelector("#bigContainer").requestFullscreen()
+                    break
+                case 'logout':
+                    localStorage.clear()
+                    history.push('/login')
+                    break
+                default:
+                    console.log('no acertaste')
+            }
+        }
+        clearTimeout(tTimer)
         console.log('[TE]')
         setX(null)
         setTransform(0)
         }
 
     return(
-        <div onClick={handleDBL} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE} className={classes.hitBox}>
+        <div onClick={handleDBL} onTouchStart={handleTS} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE} className={classes.hitBox}>
             <div className={classes.suggestions}></div>
             <form onSubmit={handleSubmit}>
                 <input
@@ -100,4 +157,9 @@ const Hitbox = (props) => {
     )
 }
 
-export default Hitbox
+const mapActions = dispatch => ({
+    displayMenu: (value) => dispatch({type: 'SET_MENU', value: value}),
+    setHighlight: (id) => dispatch({type: 'SET_HIGHLIGHT', id: id})
+})
+
+export default connect(null, mapActions)(Hitbox)

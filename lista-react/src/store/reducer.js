@@ -5,7 +5,9 @@ const initialState = {
         display: false,
         text: '',
         type: null
-    }
+    },
+    displayMenu: false,
+    highlight: null
 }
 
 const reducer = (state = initialState, action) => {
@@ -32,6 +34,16 @@ const reducer = (state = initialState, action) => {
                     ...state.popup,
                     ...action.popData
                 }
+            }
+        case 'SET_MENU':
+            return{
+                ...state,
+                displayMenu: action.value
+            }
+        case 'SET_HIGHLIGH':
+            return {
+                ...state,
+                highlight: action.id
             }
         default:
             return state

@@ -3,6 +3,7 @@ import React from 'react'
 import { connect } from 'react-redux'
 
 import Popup from '../../components/Popup/Popup'
+import Menu from '../../components/Menu/Menu'
 
 import realVh from '../../util/real-vh'
 
@@ -14,6 +15,7 @@ const layout = (props) => {
         <div id="bigContainer" className={classes.bigContainer}>
             <Popup type={props.type} display={props.display} text={props.text}/>
             {props.children}
+            <Menu display={props.displayMenu}/>
         </div>
     )
 }
@@ -21,7 +23,8 @@ const layout = (props) => {
 const mapState = (state) => ({
     type: state.popup.type,
     display: state.popup.display,
-    text: state.popup.text
+    text: state.popup.text,
+    displayMenu: state.displayMenu
 
 })
 

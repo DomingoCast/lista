@@ -13,12 +13,12 @@ const Start = (props) =>{
         //setTimeout(window.scrollTo(0,1),100);
     //})
     return(
-    <div className={classes.bigContainer}>
+        <>
         <h1 className={classes.h1}> lista </h1>
         <div className={classes.button}>
             <Button type="main" click={buttonClick} text="start"/>
         </div>
-    </div>
+        </>
     )
 }
 
