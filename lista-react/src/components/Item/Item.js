@@ -17,6 +17,8 @@ const Item = (props) => {
     const [lwait, setLwait] = useState(null)
     //const [q, setQ] = useState(props.q)
     const [gotIn, setIn] = useState(false)
+    const [tTimer, setTT] = useState(null)
+    const [onMore, setOnMore] = useState(false)
     //const [touched, setTouched] = useState(null)
 
 
@@ -35,6 +37,17 @@ const Item = (props) => {
         return props.decrease(q)
     }
 
+    const handleTS = () => {
+        console.log('[TS]')
+        let timer = setTimeout(() => {
+            //props.displayMenu(true)
+            onMore ? setOnMore(false) : setOnMore(true)
+        }, 500)
+        props.swiping ? clearTimeout(timer) : console.log('menu prevenido')
+        setTT(timer)
+    }
+
+
     const handleTM = (e, tiempoF = tiempo, maxi = 1, q = props.q) => {
         setTouch(true)
         setSwipingClass(classes.swiping)
@@ -48,6 +61,7 @@ const Item = (props) => {
             if (Math.abs(transform) <= cap){
                 setTransform(e.touches[0].clientX - x)
                 if(Math.abs(transform) >= min){
+                    clearTimeout(tTimer)
                     document.documentElement.style
                         .setProperty('--transform', `${transform}px`);
                     document.documentElement.style
@@ -98,6 +112,7 @@ const Item = (props) => {
     const handleTE = () => {
         //console.log('[TIEMPO]', tiempo)
         console.log('[TE]')
+        clearTimeout(tTimer)
         props.setQ('null')
         setMaxed(0)
         setTouch(false)
@@ -117,11 +132,18 @@ const Item = (props) => {
         //props.setQ(q)
         }
     return(
-        <div id={props.lid} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE}
-            className={`${swipingClass} ${classes.itemBox} ${classes[props.status]} ${classes['maxed'+maxed]}`}>
-            <span className={classes.minus}>-<div className={classes.minusBack}></div></span>
-            <span >{props.name} <span className={classes.q}>x{props.q}</span></span>
-            <span className={classes.plus}>+<div className={classes.plusBack}></div></span>
+        <div className={classes.bigItemContainer}>
+            <div id={props.lid}  onTouchStart={handleTS} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE}
+                className={`${swipingClass} ${classes.itemBox} ${classes[props.status]} ${classes['maxed'+maxed]}`}>
+                <span className={classes.minus}>-<div className={classes.minusBack}></div></span>
+                <span >{props.name} <span className={classes.q}>x{props.q}</span></span>
+                <span className={classes.plus}>+<div className={classes.plusBack}></div></span>
+            </div>
+            <div className={classes.addInfoContainer+' '+(onMore?null:classes.hidden)}>
+                <span>Store: {props.item.store ? props.item.store : null}</span>
+                <span>Category: {props.item.category ? props.item.category : null}</span>
+                <span>Price: {props.item.price ? props.item.price : null}</span>
+            </div>
         </div>
     )
 }

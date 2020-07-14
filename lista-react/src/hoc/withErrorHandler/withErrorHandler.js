@@ -8,7 +8,9 @@ const withErrorHandler = (WrappedComponent, axios) => {
                 componentWillMount(){
                     this.reqInterceptor = axios.interceptors.request.use(req => {
                         console.log(req)
-                        if(req.url.split('/')[0] !== 'putorder' && req.url.split('/')[0] !== 'posttolista'){
+                        const url = req.url.split('/')[0]
+                        if(url !== 'putorder' && url !== 'posttolista' && url !== 'deleteorder'){
+                            console.log('[HA GOTCHAAA] 1')
                             this.props.setPopup({
                                 display: true,
                                 text: "loading...",
@@ -18,6 +20,8 @@ const withErrorHandler = (WrappedComponent, axios) => {
                         return req
                     })
                     this.resInterceptop= axios.interceptors.response.use(res =>{
+                        console.log('[HA GOTCHAAA] 2', res)
+                        //const url = res.config.url.split('/')[0]
                         this.props.setPopup({
                             display: false
                         })

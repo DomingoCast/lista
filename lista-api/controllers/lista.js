@@ -61,12 +61,11 @@ exports.getLista = (req, res, next) => {
 exports.postToLista = (req, res, next) => {
     let ingredient
 
-    Ingredient.findOne({name: req.body.name}, (err, algo) => {     //checkear si ya existe
-        console.log('[REQ_BODY]', req.body)
+    Ingredient.findOne({name: req.body.order.item.name}, (err, algo) => {     //checkear si ya existe
         if (algo === null){
-            console.log('crea nuevo')
+            console.log('crea nuevo', req.body.order)
             ingredient = new Ingredient({
-                name: req.body.name
+                ...req.body.order.item
             })
             ingredient
                 .save()
@@ -82,7 +81,7 @@ exports.postToLista = (req, res, next) => {
     Lista.findById(req.params.listId, (err, cat) => {
         cat.orders = [...cat.orders, {
             item: ingredient._id,
-            q: req.body.q
+            q: req.body.order.q
         }]
         cat.save( )
             .then( suc => res.status(200).json(suc) )

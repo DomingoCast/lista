@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 
 import { connect, dispatch } from 'react-redux'
 import { useHistory } from 'react-router-dom'
+import InputMobile from '../InputMobile/InputMobile'
 
 import classes from './Hitbox.module.sass'
 
@@ -31,6 +32,17 @@ const Hitbox = (props) => {
     }
 
     const parseOrder = input => {
+        const data = {
+            item:{
+                name: null,
+                store: document.getElementById('store').value,
+                price: document.getElementById('price').value,
+                category: document.getElementById('category').value,
+            },
+            q: 1
+        }
+        console.log('[ADD INFO]', data)
+
         console.log('INPUT', input)
         const divided = input.split(' ')
         console.log('DIVIDED', divided)
@@ -39,20 +51,33 @@ const Hitbox = (props) => {
         }else if(divided[divided.length - 1][0] === 'x' && parseInt(divided[divided.length - 1].slice(1))){
             console.log('aqui he llegado', divided.slice(divided.length - 1).join(''), parseInt(divided[divided.length - 1].slice(1)))
             const result =[divided.slice(0, divided.length - 1).join(' '), parseInt(divided[divided.length - 1].slice(1))]
+            data.item.name = divided.slice(0, divided.length - 1).join(' ')
+            data.q = parseInt(divided[divided.length - 1].slice(1))
+
             console.log('[RESULT]', result)
-            return result
+            //return result
         } else {
-            return [input, 1]
+            data.item.name = input
+            data.q = 1
         }
+        return data
     }
 
     const parseLista = input => {
         return input
     }
 
+    const clearInputs = () => {
+        document.getElementById("store").value = ""
+        document.getElementById("category").value = ""
+        document.getElementById("price").value = ""
+        document.getElementById("searchInput").value = ""
+    }
+
     const handleSubmit = (e) => {
         e.preventDefault()
         const value = document.querySelector('#searchInput').value
+        props.setMInput('hidden')
 
         let parsed
         switch(props.type){
@@ -66,6 +91,8 @@ const Hitbox = (props) => {
                 parsed = null
         }
 
+        clearInputs()
+
         return props.submit(parsed)
 
     }
@@ -74,8 +101,9 @@ const Hitbox = (props) => {
         console.log('[TS]')
         let timer = setTimeout(() => {
             props.displayMenu(true)
-            setOnMenu(true)
+            props.swiping ? console.log('menu abortado') : setOnMenu(true)
         }, 1000)
+        props.swiping ? clearTimeout(timer) : console.log('menu prevenido')
         setTT(timer)
     }
 
@@ -83,7 +111,6 @@ const Hitbox = (props) => {
     const handleTM = (e) => {
         setCoor([e.touches[0].clientX, e.touches[0].clientY])
         console.log('[TM]')
-
         if(!x){                 //si no hay valor de posicion anterior
             setX(e.touches[0].clientX)
         } else if(!onMenu){
@@ -153,23 +180,24 @@ const Hitbox = (props) => {
         }
 
     return(
-        <div onClick={handleDBL} onTouchStart={handleTS} onTouchMove={handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE} className={classes.hitBox}>
+        <div onClick={handleDBL} onTouchStart={handleTS} onTouchMove={props.swiping ? null : handleTM} onTouchCancel={handleTE} onTouchEnd={handleTE} className={classes.hitBox}>
             <div className={classes.suggestions}></div>
             <form onSubmit={handleSubmit}>
-                <input
-                    type="text"
-                    id="searchInput"
-                    className={focused ? classes.focused : classes.unFocused}
-                />
+                <InputMobile categories={['store', 'category', 'price']} focused={focused}/>
                 <input className={classes.submitBtn}type="submit"/>
             </form>
         </div>
     )
 }
 
-const mapActions = dispatch => ({
-    displayMenu: (value) => dispatch({type: 'SET_MENU', value: value}),
-    setHighlight: (id) => dispatch({type: 'SET_HIGHLIGHT', id: id})
+const mapState = (state) => ({
+    swiping: state.swiping
 })
 
-export default connect(null, mapActions)(Hitbox)
+const mapActions = dispatch => ({
+    displayMenu: (value) => dispatch({type: 'SET_MENU', value: value}),
+    setHighlight: (id) => dispatch({type: 'SET_HIGHLIGHT', id: id}),
+    setMInput: (value) => dispatch({type: 'SET_MINPUT', value: value}),
+})
+
+export default connect(mapState, mapActions)(Hitbox)

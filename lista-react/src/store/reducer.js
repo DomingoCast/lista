@@ -7,7 +7,9 @@ const initialState = {
         type: null
     },
     displayMenu: false,
-    highlight: null
+    highlight: null,
+    swiping: null,
+    moreInput: 'hidden'
 }
 
 const reducer = (state = initialState, action) => {
@@ -44,6 +46,16 @@ const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 highlight: action.id
+            }
+        case 'SET_SWIPING':
+            return {
+                ...state,
+                swiping: action.name
+            }
+        case 'SET_MINPUT':
+            return {
+                ...state,
+                moreInput: action.value
             }
         default:
             return state

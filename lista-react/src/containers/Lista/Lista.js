@@ -39,16 +39,44 @@ const Lista = (props) => {
             })
         console.log('algo?')
         }, [update, props])
+
     useEffect(() => {
         handleScroll()
+
+        //console.log('[ITEMS]', items, items.length)
+        //let c = true
+        //for(let item of items){
+            //console.log(item)
+            //if(item.q !== -1){
+                //c = false
+                //break
+            //}
+
+        //}
+
+        //if(items.length === 0 || c){
+            //console.log('NADA')
+            //props.setPopup({
+               //display: true,
+                //type: 'loading',
+                //text: 'touch at the bottom to add a new order'
+            //})
+        //} else {
+            //console.log('[WAIT WHAAT?]')
+            //props.setPopup({
+                //display: false
+            //})
+        //}
+
     }, [items])
 
-    const handleSubmit = (parsed) => {
+    const handleSubmit = (order) => { //hacer que anyada a ui de la respuesta del post, si no no funciona el item
+        console.log('[order]', order, items)
 
-        if (parsed !== null){
-            setItems([...items,{item:{name: parsed[0]}, q: parsed[1]}])
-            axios.post(`posttolista/${listId}`, {name: parsed[0] ,q: parsed[1]})
-                //.then(res => console.log(res))
+        if (order !== null){
+            setItems([...items,{item:{...order.item}, q:order.q}])
+            axios.post(`posttolista/${listId}`, {order: order})
+                .then(res => console.log(res))
                 .catch(err => console.log(err))
 
         }
@@ -62,8 +90,11 @@ const Lista = (props) => {
     const deleteOrder = (orderId) => {
         console.log('[DELETING]', orderId)
         axios.delete(`deleteorder/${listId}/${orderId}`)
-            .then(res => console.log(res))
-            .catch(err => console.log(err))
+            .then(res => {
+                console.log('DELETE', res)
+            })
+            .catch(err => console.log('DELETE', err))
+
     }
 
 
@@ -99,9 +130,13 @@ const Lista = (props) => {
         } else if(newOrder.q === -1){
             newOrder.status = 'borrado'
             console.log('spaghetti', id)
-            deleteOrder(id)
+            //borrar
+            //delete newItems[index]
+            //newItems.splice(index, 1)
+
             newItems[index] = newOrder
             setItems(newItems)
+            deleteOrder(id)
             return
         }
 
@@ -115,17 +150,18 @@ const Lista = (props) => {
 
 
 
-    const listItems = items.map((item, index) => (
+    let listItems = items.map((item, index) => item ? (
         <Item name={item.item ? item.item.name : null}
                 key={item._id}
                 lid={item._id}
+                item={item.item ? item.item : {store: null, price: null, category: null}}
                 q={item.q}
                 status={item.status}
                 increase={ (q) => increase(item._id, index, q) }
                 decrease={ (q) => decrease(item._id, index, q)}
                //setQ={ () => setQ(index) }
         />
-    ))
+    ): null)
 
     const handleScroll = () => {
         console.log('[POR QE PASAS SE IIIIII]')
@@ -164,7 +200,7 @@ const Lista = (props) => {
             </div>
             <Hitbox
                 type="order"
-                submit={(parsed) => handleSubmit(parsed)}
+                submit={(order) => handleSubmit(order)}
                 goBack={props.history.goBack}
             />
         </>

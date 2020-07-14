@@ -14,6 +14,10 @@ const ingredientSchema = new Schema({
         type: Number,
         required: false
     },
+    category: {
+        type: String,
+        required: false
+    }
 })
 
 module.exports = mongoose.model('Ingredient', ingredientSchema)
