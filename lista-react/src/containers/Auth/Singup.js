@@ -2,6 +2,7 @@ import React from 'react'
 
 import { Link } from 'react-router-dom'
 import axios from '../../axios-instances/axios-auth'
+import { connect } from 'react-redux'
 
 import Button from '../../components/Button/Button'
 import Input from '../../components/Input/Input'
@@ -11,20 +12,33 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import classes from './Auth.module.sass'
 
 const Singup = (props) => {
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e ? e.preventDefault() : console.log('no e')
         console.log('[SUBMIT]')
-        const uname = document.getElementById('username').value
-        const pw1 = document.getElementById('password1').value
-        const pw2 = document.getElementById('password2').value
-        console.log('[DATA]', uname, pw1, pw2)
-        axios.post('postuser', {
-            username: uname,
-            password1: pw1,
-            password2: pw2
-        })
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
+        const username = document.getElementById('username').value
+        const password1 = document.getElementById('password1').value
+        const password2 = document.getElementById('password2').value
+        try {
+            let singRes = await axios.post('postuser', {
+                username: username,
+                password1: password1,
+                password2: password2
+            })
+            console.log(singRes)
+
+            let logRes = await axios.post('login', {
+                username: username,
+                password: password1
+            })
+            props.setToken(logRes.data.token)
+            localStorage.clear()
+            localStorage.setItem('token', JSON.stringify(logRes.data.token))
+            props.history.push('/listas')
+            console.log(logRes)
+        }
+        catch (error){
+            console.log('[SINGUP ERROR]', error)
+        }
     }
     return(
         <>
@@ -46,4 +60,10 @@ const Singup = (props) => {
     )
 }
 
-export default withErrorHandler(Singup, axios)
+const mapActions = (dispatch) => {
+    return{
+        setToken: (token) => dispatch({type: 'SET_TOKEN',token: token})
+    }
+}
+
+export default connect(null, mapActions)(withErrorHandler(Singup, axios))

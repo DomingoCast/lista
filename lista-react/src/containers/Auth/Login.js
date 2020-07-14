@@ -33,14 +33,11 @@ const Login = (props) => {
                 password: password
             })
 
-                if(document.fullscreenElement !== null){
-                    document.exitFullscreen()
-                }
-                console.log(res, res.response, res.error)
-                props.setToken(res.data.token)
-                localStorage.clear()
-                localStorage.setItem('token', JSON.stringify(res.data.token))
-                props.history.push('/listas')
+            console.log(res, res.response, res.error)
+            props.setToken(res.data.token)
+            localStorage.clear()
+            localStorage.setItem('token', JSON.stringify(res.data.token))
+            props.history.push('/listas')
 
         } catch (error){
             console.log('emosido enganiado')

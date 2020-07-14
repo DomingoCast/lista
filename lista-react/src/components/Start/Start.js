@@ -13,7 +13,7 @@ const Start = (props) =>{
     //document.documentElement.style.setProperty('--totalVh', totalVh+'px')
 
     const buttonClick = () => {
-        document.querySelector("#bigContainer").requestFullscreen()
+        //document.querySelector("#bigContainer").requestFullscreen()
         props.history.push('/login')
     }
     //useEffect(() => {

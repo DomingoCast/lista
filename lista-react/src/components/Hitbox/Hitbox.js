@@ -101,7 +101,7 @@ const Hitbox = (props) => {
             //console.log(element.id)
             for(let el of elements){
                 console.log('[COMP]', el, element.id )
-                if(element.id === el){
+                if(element.id === el || element.id === el+'Div' || element.parentElement.id === el){
                     //console.log('YA')
                     document.getElementById(el).setAttribute("style", "font-weight:700;")
                     //break
@@ -125,10 +125,20 @@ const Hitbox = (props) => {
                 case 'donate':
                     console.log('MIS DINEROOOOS')
                     break
+                case 'donateDiv':
+                    console.log('MIS DINEROOOOS')
+                    break
                 case 'fullscreen':
                     document.querySelector("#bigContainer").requestFullscreen()
                     break
+                case 'fullscreenDiv':
+                    document.querySelector("#bigContainer").requestFullscreen()
+                    break
                 case 'logout':
+                    localStorage.clear()
+                    history.push('/login')
+                    break
+                case 'logoutDiv':
                     localStorage.clear()
                     history.push('/login')
                     break
