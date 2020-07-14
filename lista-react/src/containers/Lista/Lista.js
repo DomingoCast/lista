@@ -19,6 +19,7 @@ const Lista = (props) => {
     const [listName, setListName] = useState("")
     const [listId, setListId] = useState("")
     const [scroll, setScroll] = useState('null')
+    const [sorting, setSorting] = useState('category')
 
     const [update, setUpdate] = useState(0)
 
@@ -42,32 +43,6 @@ const Lista = (props) => {
 
     useEffect(() => {
         handleScroll()
-
-        //console.log('[ITEMS]', items, items.length)
-        //let c = true
-        //for(let item of items){
-            //console.log(item)
-            //if(item.q !== -1){
-                //c = false
-                //break
-            //}
-
-        //}
-
-        //if(items.length === 0 || c){
-            //console.log('NADA')
-            //props.setPopup({
-               //display: true,
-                //type: 'loading',
-                //text: 'touch at the bottom to add a new order'
-            //})
-        //} else {
-            //console.log('[WAIT WHAAT?]')
-            //props.setPopup({
-                //display: false
-            //})
-        //}
-
     }, [items])
 
     const handleSubmit = (order) => { //hacer que anyada a ui de la respuesta del post, si no no funciona el item
@@ -87,6 +62,7 @@ const Lista = (props) => {
             .then(res => console.log('[UP ORDER]', res.data.orders))
             .catch(err => console.log(err))
     }
+
     const deleteOrder = (orderId) => {
         console.log('[DELETING]', orderId)
         axios.delete(`deleteorder/${listId}/${orderId}`)
@@ -126,13 +102,9 @@ const Lista = (props) => {
         console.log('[NEW ORDER]', newOrder)
         if (newOrder.q === 0){
             newOrder.status = 'bought'
-            //return
         } else if(newOrder.q === -1){
             newOrder.status = 'borrado'
             console.log('spaghetti', id)
-            //borrar
-            //delete newItems[index]
-            //newItems.splice(index, 1)
 
             newItems[index] = newOrder
             setItems(newItems)
@@ -147,29 +119,75 @@ const Lista = (props) => {
         updateOrder(newOrder)
         return q - 1
     }
+    const sortItems = () => {
+        if (sorting === 'time'){
+            return items
+
+        } else if (sorting === 'category'){
+            console.log('category')
+            const categories = []
+            let ordered = {}
+
+            for(let order of items){
+                if(!categories.includes(order.item.category)){
+                    ordered[order.item.category] = []
+                }
+                ordered[order.item.category].push(order)
+            }
+            console.log('[SORTED]', ordered)
+            return ordered
+        }
+    }
 
 
 
-    let listItems = items.map((item, index) => item ? (
-        <Item name={item.item ? item.item.name : null}
-                key={item._id}
-                lid={item._id}
-                item={item.item ? item.item : {store: null, price: null, category: null}}
-                q={item.q}
-                status={item.status}
-                increase={ (q) => increase(item._id, index, q) }
-                decrease={ (q) => decrease(item._id, index, q)}
-               //setQ={ () => setQ(index) }
-        />
-    ): null)
+    let listItems = () => {
+        let finalList = []
+        const ordered = sortItems()
+
+        if(sorting !== 'time'){
+            for(let cat in ordered){
+
+                let listaza = ordered[cat].map((item, index) => item ? (
+                    <Item name={item.item ? item.item.name : null}
+                                key={item._id}
+                                lid={item._id}
+                                item={item.item ? item.item : {store: null, price: null, category: null}}
+                                q={item.q}
+                                status={item.status}
+                                increase={ (q) => increase(item._id, index, q) }
+                                decrease={ (q) => decrease(item._id, index, q)}
+                               //setQ={ () => setQ(index) }
+                        />
+                    ): null)
+                console.log('[IN]', cat, ordered[cat], listaza)
+
+                finalList = finalList.concat(listaza)
+            }
+
+        } else {
+            finalList = ordered.map((item, index) => item ? (
+                    <Item name={item.item ? item.item.name : null}
+                            key={item._id}
+                            lid={item._id}
+                            item={item.item ? item.item : {store: null, price: null, category: null}}
+                            q={item.q}
+                            status={item.status}
+                            increase={ (q) => increase(item._id, index, q) }
+                            decrease={ (q) => decrease(item._id, index, q)}
+                           //setQ={ () => setQ(index) }
+                    />
+
+                ): null)
+        }
+
+        return finalList
+    }
 
     const handleScroll = () => {
-        console.log('[POR QE PASAS SE IIIIII]')
-        //const element = document.getElementById(listId.toString())
+
         const element = document.querySelector("."+classes.itemsContainer)
-        console.log('[HOLLLLLLLLLLLA]', element.scrollHeight, element.clientHeight)
-        //let scrollClass
-        //console.log('[heights]', element.scrollHeight - element.scrollTop, element.clientHeight)
+
         if (element.scrollHeight === element.clientHeight){
             if(scroll !== null){
                 setScroll(null)
@@ -191,12 +209,11 @@ const Lista = (props) => {
 
     realVh()
 
-    //{/* onFocus={handleDBL} onBlur={handleDBL} */}
     return(
         <>
             <h1 className={classes.h1}>{listName}</h1>
             <div id={listId} onScroll={handleScroll} className={classes.itemsContainer + ' ' + scroll}>
-                {listItems}
+                {listItems()}
             </div>
             <Hitbox
                 type="order"
