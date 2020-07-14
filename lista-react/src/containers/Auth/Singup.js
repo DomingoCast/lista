@@ -11,7 +11,8 @@ import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 import classes from './Auth.module.sass'
 
 const Singup = (props) => {
-    const handleSubmit = () => {
+    const handleSubmit = (e) => {
+        e ? e.preventDefault() : console.log('no e')
         console.log('[SUBMIT]')
         const uname = document.getElementById('username').value
         const pw1 = document.getElementById('password1').value
@@ -28,15 +29,18 @@ const Singup = (props) => {
     return(
         <>
             <div className={classes.loginContainer}>
-                <h1 className={classes.h1}>sing up</h1>
-                <div className={classes.inputContainer}>
-                    <Input type="username"/>
-                    <Input type="doublePassword"/>
-                </div>
-                <div className={classes.block3}>
-                    <Button className={classes.button} type="main" text="sing up" click={handleSubmit}/>
-                    <Link className={classes.link} to='/login'>log in</Link>
-                </div>
+                <form onSubmit={handleSubmit} className={classes.form}>
+                    <h1 className={classes.h1}>sing up</h1>
+                    <div className={classes.inputContainer}>
+                        <Input type="username"/>
+                        <Input type="doublePassword"/>
+                        <input className={classes.submitHidden} type="submit"/>
+                    </div>
+                    <div className={classes.block3}>
+                        <Button className={classes.button} type="main" text="sing up" click={handleSubmit}/>
+                        <Link className={classes.link} to='/login'>log in</Link>
+                    </div>
+                </form>
             </div>
         </>
     )

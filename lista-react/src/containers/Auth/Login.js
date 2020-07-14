@@ -24,7 +24,7 @@ const Login = (props) => {
     })
 
     const handleSubmit = async (e) => {
-        e.preventDefault()
+        e ? e.preventDefault() : console.log('no e')
         const username = document.getElementById('username').value
         const password = document.getElementById('password').value
         try {
