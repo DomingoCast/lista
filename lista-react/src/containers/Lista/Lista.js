@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 
 import { connect, dispatch } from 'react-redux'
+import openSocket from 'socket.io-client'
 
 import axios from '../../axios-instances/axios-lista'
 
@@ -12,6 +13,7 @@ import Hitbox from '../../components/Hitbox/Hitbox'
 import withErrorHandler from '../../hoc/withErrorHandler/withErrorHandler'
 
 import realVh from '../../util/real-vh'
+import dev from '../../util/dev'
 
 
 const Lista = (props) => {
@@ -19,7 +21,7 @@ const Lista = (props) => {
     const [listName, setListName] = useState("")
     const [listId, setListId] = useState("")
     const [scroll, setScroll] = useState('null')
-    const [sorting, setSorting] = useState('category')
+    const [sorting, setSorting] = useState('time')
 
     const [update, setUpdate] = useState(0)
 
@@ -33,25 +35,43 @@ const Lista = (props) => {
                 setListName(res.data.name)
                 setListId(res.data._id)
                 setItems(res.data.orders)
-
+                console.log('[ITEMS]', res.data.orders, items)
             })
             .catch( err => {
                 console.log('[FIRST_ERR]', err)
             })
-        console.log('algo?')
-        }, [update, props])
+        //console.log('algo?')
+
+        }, [update])
+
+    useEffect(() => {
+        const socket = openSocket(dev.url)
+        socket.on('orders', data => {
+            if(data.action === 'post'){
+                console.log('[PUT SOCKET]', data.order)
+                addOrderLocal(data.order)
+            }
+        })
+    })
 
     useEffect(() => {
         handleScroll()
     }, [items])
 
+    const addOrderLocal = (order) => {
+        console.log('[ADD]', items)
+        if (order !== null && items.length !== 0){
+            setItems([...items,{item:{...order.item}, q:order.q}])
+        }
+    }
+
     const handleSubmit = (order) => { //hacer que anyada a ui de la respuesta del post, si no no funciona el item
-        console.log('[order]', order, items)
+        //console.log('[order]', order, items)
 
         if (order !== null){
-            setItems([...items,{item:{...order.item}, q:order.q}])
+            //setItems([...items,{item:{...order.item}, q:order.q}])
             axios.post(`posttolista/${listId}`, {order: order})
-                .then(res => console.log(res))
+                //.then(res => console.log(res))
                 .catch(err => console.log(err))
 
         }
@@ -59,15 +79,15 @@ const Lista = (props) => {
 
     const updateOrder = (newOrder) => {
         axios.put(`putorder/${listId}`, {order: newOrder})
-            .then(res => console.log('[UP ORDER]', res.data.orders))
+            //.then(res => console.log('[UP ORDER]', res.data.orders))
             .catch(err => console.log(err))
     }
 
     const deleteOrder = (orderId) => {
-        console.log('[DELETING]', orderId)
+        //console.log('[DELETING]', orderId)
         axios.delete(`deleteorder/${listId}/${orderId}`)
             .then(res => {
-                console.log('DELETE', res)
+                //console.log('DELETE', res)
             })
             .catch(err => console.log('DELETE', err))
 
@@ -81,7 +101,7 @@ const Lista = (props) => {
         const newOrder = {...newItems[index]}
         newOrder.q = q + 1
 
-        console.log('[INCRESE LISTA]', props.currQ)
+        //console.log('[INCRESE LISTA]', props.currQ)
         newItems[index] = newOrder
         setItems(newItems)
 
@@ -99,12 +119,12 @@ const Lista = (props) => {
         const newOrder = {...newItems[index]}
 
         newOrder.q =  q - 1
-        console.log('[NEW ORDER]', newOrder)
+        //console.log('[NEW ORDER]', newOrder)
         if (newOrder.q === 0){
             newOrder.status = 'bought'
         } else if(newOrder.q === -1){
             newOrder.status = 'borrado'
-            console.log('spaghetti', id)
+            //console.log('spaghetti', id)
 
             newItems[index] = newOrder
             setItems(newItems)
@@ -114,17 +134,18 @@ const Lista = (props) => {
 
         newItems[index] = newOrder
         setItems(newItems)
-        console.log('[decreasing]')
+        //console.log('[decreasing]')
 
         updateOrder(newOrder)
         return q - 1
     }
     const sortItems = () => {
+        console.log('[ITEMS 2]', items)
         if (sorting === 'time'){
             return items
 
         } else if (sorting === 'category'){
-            console.log('category')
+            //console.log('category')
             const categories = []
             let ordered = {}
 
@@ -134,7 +155,7 @@ const Lista = (props) => {
                 }
                 ordered[order.item.category].push(order)
             }
-            console.log('[SORTED]', ordered)
+            //console.log('[SORTED]', ordered)
             return ordered
         }
     }
@@ -160,7 +181,7 @@ const Lista = (props) => {
                                //setQ={ () => setQ(index) }
                         />
                     ): null)
-                console.log('[IN]', cat, ordered[cat], listaza)
+                //console.log('[IN]', cat, ordered[cat], listaza)
 
                 finalList = finalList.concat(listaza)
             }

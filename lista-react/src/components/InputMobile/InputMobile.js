@@ -14,7 +14,7 @@ const InputMobile = (props) => {
 
 
     const handleTM = (e) => {
-        console.log('[TM]')
+        //console.log('[TM]')
         if(!x){                 //si no hay valor de posicion anterior
             setX(e.touches[0].clientX)
             props.setSwiping('input')
@@ -31,18 +31,18 @@ const InputMobile = (props) => {
     }
 
     const handleTE = () => {
-        console.log('[TE]')
+        //console.log('[TE]')
         //props.setSwiping(null)
         setX(null)
         setTransform(0)
     }
 
     const focused = props.focused ? classes.focused : classes.unFocused
-    console.log('[CAT]', props.categories)
+    //console.log('[CAT]', props.categories)
     const categories = props.categories.map( cat => <input id={cat} className={classes.catInput} type="text" placeholder={ cat }/>)
 
     const handleFocus = () => {
-        console.log('OLAA')
+        //console.log('OLAA')
         setHMore('hidden')
         props.setMInput('hidden')
     }

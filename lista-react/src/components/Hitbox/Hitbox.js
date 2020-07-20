@@ -20,7 +20,7 @@ const Hitbox = (props) => {
     const history = useHistory()
 
     const handleDBL = () => {
-        console.log('[FOCUS]: ',focused)
+        //console.log('[FOCUS]: ',focused)
         const linput = document.querySelector('#searchInput')
         if(focused){
             setFocus(false)
@@ -41,20 +41,20 @@ const Hitbox = (props) => {
             },
             q: 1
         }
-        console.log('[ADD INFO]', data)
+        //console.log('[ADD INFO]', data)
 
-        console.log('INPUT', input)
+        //console.log('INPUT', input)
         const divided = input.split(' ')
-        console.log('DIVIDED', divided)
+        //console.log('DIVIDED', divided)
         if(!input){
             return null
         }else if(divided[divided.length - 1][0] === 'x' && parseInt(divided[divided.length - 1].slice(1))){
-            console.log('aqui he llegado', divided.slice(divided.length - 1).join(''), parseInt(divided[divided.length - 1].slice(1)))
+            //console.log('shdfjfhdjhfhj')
             const result =[divided.slice(0, divided.length - 1).join(' '), parseInt(divided[divided.length - 1].slice(1))]
             data.item.name = divided.slice(0, divided.length - 1).join(' ')
             data.q = parseInt(divided[divided.length - 1].slice(1))
 
-            console.log('[RESULT]', result)
+            //console.log('[RESULT]', result)
             //return result
         } else {
             data.item.name = input
@@ -98,7 +98,7 @@ const Hitbox = (props) => {
     }
 
     const handleTS = () => {
-        console.log('[TS]')
+        //console.log('[TS]')
         let timer = setTimeout(() => {
             props.displayMenu(true)
             props.swiping ? console.log('menu abortado') : setOnMenu(true)
@@ -110,7 +110,7 @@ const Hitbox = (props) => {
     let elements = ['fullscreen', 'logout', 'donate']
     const handleTM = (e) => {
         setCoor([e.touches[0].clientX, e.touches[0].clientY])
-        console.log('[TM]')
+        //console.log('[TM]')
         if(!x){                 //si no hay valor de posicion anterior
             setX(e.touches[0].clientX)
         } else if(!onMenu){
@@ -118,7 +118,7 @@ const Hitbox = (props) => {
                 setTransform(e.touches[0].clientX - x)
             } else {
                 clearTimeout(tTimer)
-                console.log(props.history)
+                //console.log(props.history)
                 props.goBack()
             }
         } else {
@@ -127,7 +127,7 @@ const Hitbox = (props) => {
             props.setHighlight(element.id)
             //console.log(element.id)
             for(let el of elements){
-                console.log('[COMP]', el, element.id )
+                //console.log('[COMP]', el, element.id )
                 if(element.id === el || element.id === el+'Div' || element.parentElement.id === el){
                     //console.log('YA')
                     document.getElementById(el).setAttribute("style", "font-weight:700;")
@@ -146,14 +146,14 @@ const Hitbox = (props) => {
         //console.log('[TIEMPO]', tiempo)
         if (onMenu){
             const element = document.elementFromPoint(...coor)
-            console.log(element.id)
+            //console.log(element.id)
             props.displayMenu(false)
             switch(element.id){
                 case 'donate':
-                    console.log('MIS DINEROOOOS')
+                    //console.log('MIS DINEROOOOS')
                     break
                 case 'donateDiv':
-                    console.log('MIS DINEROOOOS')
+                    //console.log('MIS DINEROOOOS')
                     break
                 case 'fullscreen':
                     document.querySelector("#bigContainer").requestFullscreen()
@@ -174,7 +174,7 @@ const Hitbox = (props) => {
             }
         }
         clearTimeout(tTimer)
-        console.log('[TE]')
+        //console.log('[TE]')
         setX(null)
         setTransform(0)
         }
