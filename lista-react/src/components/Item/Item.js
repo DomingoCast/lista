@@ -38,7 +38,7 @@ const Item = (props) => {
     }
 
     const handleTS = () => {
-        console.log('[TS]')
+        console.log('[TS ITEM]')
         let timer = setTimeout(() => {
             //props.displayMenu(true)
             onMore ? setOnMore(false) : setOnMore(true)
@@ -49,6 +49,8 @@ const Item = (props) => {
 
 
     const handleTM = (e, tiempoF = tiempo, maxi = 1, q = props.q) => {
+        e.persist() //para ensenyar siemrpe el e
+        console.log('[TM ITEM]: ', e.touches[0].clientX)
         setTouch(true)
         setSwipingClass(classes.swiping)
 
@@ -97,7 +99,7 @@ const Item = (props) => {
                             //console.log('[MAX]', maxed)
                             //console.log('[IN]', waiting, tiempo)
                             handleTM(e, elTiempo, 2, mientrasQ)
-                        },tiempoF)
+                        }, tiempoF)
                     }
 
                     setLwait(lmao)
@@ -111,7 +113,7 @@ const Item = (props) => {
 
     const handleTE = () => {
         //console.log('[TIEMPO]', tiempo)
-        console.log('[TE]')
+        console.log('[TE ITEM]')
         clearTimeout(tTimer)
         props.setQ('null')
         setMaxed(0)

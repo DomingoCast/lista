@@ -39,7 +39,7 @@ const InputMobile = (props) => {
 
     const focused = props.focused ? classes.focused : classes.unFocused
     //console.log('[CAT]', props.categories)
-    const categories = props.categories.map( cat => <input id={cat} className={classes.catInput} type="text" placeholder={ cat }/>)
+    const categories = props.categories.map( cat => <input id={cat} key={cat} className={classes.catInput} type="text" placeholder={ cat }/>)
 
     const handleFocus = () => {
         //console.log('OLAA')

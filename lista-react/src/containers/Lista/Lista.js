@@ -125,7 +125,6 @@ const Lista = (props) => {
         } else if(newOrder.q === -1){
             newOrder.status = 'borrado'
             //console.log('spaghetti', id)
-
             newItems[index] = newOrder
             setItems(newItems)
             deleteOrder(id)
@@ -139,9 +138,11 @@ const Lista = (props) => {
         updateOrder(newOrder)
         return q - 1
     }
+
     const sortItems = () => {
         console.log('[ITEMS 2]', items)
         if (sorting === 'time'){
+            console.log('IN TIME')
             return items
 
         } else if (sorting === 'category'){
@@ -162,48 +163,7 @@ const Lista = (props) => {
 
 
 
-    let listItems = () => {
-        let finalList = []
-        const ordered = sortItems()
 
-        if(sorting !== 'time'){
-            for(let cat in ordered){
-
-                let listaza = ordered[cat].map((item, index) => item ? (
-                    <Item name={item.item ? item.item.name : null}
-                                key={item._id}
-                                lid={item._id}
-                                item={item.item ? item.item : {store: null, price: null, category: null}}
-                                q={item.q}
-                                status={item.status}
-                                increase={ (q) => increase(item._id, index, q) }
-                                decrease={ (q) => decrease(item._id, index, q)}
-                               //setQ={ () => setQ(index) }
-                        />
-                    ): null)
-                //console.log('[IN]', cat, ordered[cat], listaza)
-
-                finalList = finalList.concat(listaza)
-            }
-
-        } else {
-            finalList = ordered.map((item, index) => item ? (
-                    <Item name={item.item ? item.item.name : null}
-                            key={item._id}
-                            lid={item._id}
-                            item={item.item ? item.item : {store: null, price: null, category: null}}
-                            q={item.q}
-                            status={item.status}
-                            increase={ (q) => increase(item._id, index, q) }
-                            decrease={ (q) => decrease(item._id, index, q)}
-                           //setQ={ () => setQ(index) }
-                    />
-
-                ): null)
-        }
-
-        return finalList
-    }
 
     const handleScroll = () => {
 
@@ -228,13 +188,72 @@ const Lista = (props) => {
         }
     }
 
+
     realVh()
+
+    const listItemsConstructor = () => {
+        let listItems
+        let finalList = []
+        const ordered = sortItems()
+
+        if(sorting !== 'time'){
+            for(let cat in ordered){
+
+                let listaza = ordered[cat].map((item, index) => item ? (
+                    <Item name={item.item ? item.item.name : null}
+                                key={item._id}
+                                lid={item._id}
+                                item={item.item ? item.item : {store: null, price: null, category: null}}
+                                q={item.q}
+                                status={item.status}
+                                increase={ (q) => increase(item._id, index, q) }
+                                decrease={ (q) => decrease(item._id, index, q)}
+                               //setQ={ () => setQ(index) }
+                        />
+                    ): null)
+                //console.log('[IN]', cat, ordered[cat], listaza)
+
+                listItems = finalList.concat(listaza)
+            }
+            return listItems
+
+        } else {
+            console.log('[IN TIME 2]')
+            listItems = items.map((item, index) => item ? (
+                <Item name={item.item ? item.item.name : null}
+                            key={item._id}
+                            lid={item._id}
+                            item={item.item ? item.item : {store: null, price: null, category: null}}
+                            q={item.q}
+                            status={item.status}
+                            increase={ (q) => increase(item._id, index, q) }
+                            decrease={ (q) => decrease(item._id, index, q)}
+                           //setQ={ () => setQ(index) }
+                    />
+                ): null)
+            return listItems
+        }
+
+    }
+
+    //let listItems = items.map((item, index) => item ? (
+        //<Item name={item.item ? item.item.name : null}
+                    //key={item._id}
+                    //lid={item._id}
+                    //item={item.item ? item.item : {store: null, price: null, category: null}}
+                    //q={item.q}
+                    //status={item.status}
+                    //increase={ (q) => increase(item._id, index, q) }
+                    //decrease={ (q) => decrease(item._id, index, q)}
+                   ////setQ={ () => setQ(index) }
+            ///>
+        //): null)
 
     return(
         <>
             <h1 className={classes.h1}>{listName}</h1>
             <div id={listId} onScroll={handleScroll} className={classes.itemsContainer + ' ' + scroll}>
-                {listItems()}
+                {listItemsConstructor()}
             </div>
             <Hitbox
                 type="order"
