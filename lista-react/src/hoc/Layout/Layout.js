@@ -13,9 +13,11 @@ const layout = (props) => {
     realVh()
     return (
         <div id="bigContainer" className={classes.bigContainer}>
-            <Popup type={props.type} display={props.display} text={props.text}/>
-            {props.children}
-            <Menu display={props.displayMenu}/>
+            <div className={classes.phone}>
+                <Popup type={props.type} display={props.display} text={props.text}/>
+                {props.children}
+                <Menu display={props.displayMenu}/>
+            </div>
         </div>
     )
 }
